@@ -3,7 +3,7 @@ let g = 0;
 let b = 255;
 
 function setup() {
-  createCanvas(600, 400);
+  createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -14,4 +14,8 @@ function draw() {
   //ellipse
   fill(250,118,222);
   ellipse(mouseX, 200, 64, 64);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
