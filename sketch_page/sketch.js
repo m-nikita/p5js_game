@@ -9,6 +9,8 @@ let score = 0;
 
 let obstacles = [];
 
+let boutonsEcranTactile = [];
+
 function setup() {
   createCanvas(600, 400);
   let obstacle1 = new Map();
@@ -25,6 +27,16 @@ function setup() {
   obstacle2.set("height", 150);
   obstacle2.set("check", false);
   obstacles[1] = obstacle2;
+
+  boutonsEcranTactile.push(createButton('Left'));
+  boutonsEcranTactile[0].position(550,500);
+  boutonsEcranTactile.push(createButton('Right'));
+  boutonsEcranTactile[1].position(450,500);
+  
+  boutonsEcranTactile.push(createButton('Up'));
+  boutonsEcranTactile[2].position(500,480);
+  boutonsEcranTactile.push(createButton('Down'));
+  boutonsEcranTactile[3].position(500,500);
 }
 
 function preload() {
