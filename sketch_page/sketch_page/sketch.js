@@ -55,7 +55,7 @@ function genererTuyaux() {
   let hauteur_tuyau = 1499;
 
   for(i = 0; i <= nbr_tuyaux; i++) {
-    tuyaux[i] = new Tuyau(img_tuyau, position_x_premier_tuyau + decalage_tuyaux_x, random(400,500), largeur_tuyau / ratio_taille_tuyaux, hauteur_tuyau / ratio_taille_tuyaux);
+    tuyaux[i] = new Tuyau(img_tuyau, position_x_premier_tuyau + decalage_tuyaux_x, random(400,600), largeur_tuyau / ratio_taille_tuyaux, hauteur_tuyau / ratio_taille_tuyaux);
     decalage_tuyaux_x += espacement_tuyaux_x;
     tuyaux[i].afficherTuyau();
   }
