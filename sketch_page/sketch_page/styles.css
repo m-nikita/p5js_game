@@ -1,0 +1,13 @@
+.red-text {
+  color: #FF5963;
+}
+
+.red-img {
+  border: 25px solid red;
+  border-radius: 50%;
+}
+
+table, th, td {
+    border-color: #FF5963;
+    border-style: groove;
+}
