@@ -19,8 +19,6 @@ function draw() {
   fill(250, 118, 222);
   ellipse(mouseX, 200, 64, 64);
 
-  //let tuyau = new Tuyau(img_tuyau, 300, 300, 244 / 2, 1499 / 2);
-  //tuyau.afficherTuyau();
   genererTuyaux();
 }
 
@@ -29,13 +27,14 @@ function windowResized() {
 }
 
 class Tuyau {
+  position_y_tuyau = random(windowHeight - 200, windowHeight - 300);
 
   constructor(image_tuyau, position_x_tuyau, position_y_tuyau, largeur_tuyau, hauteur_tuyau) {
     this.image_tuyau = image_tuyau;
     this.position_x_tuyau = position_x_tuyau;
     this.position_y_tuyau = position_y_tuyau;
     this.largeur_tuyau = largeur_tuyau;
-    this.hauteur_tuyau = hauteur_tuyau
+    this.hauteur_tuyau = hauteur_tuyau;
   }
 
   afficherTuyau() {
@@ -46,16 +45,19 @@ class Tuyau {
 
 function genererTuyaux() {
   var tuyaux = [];
-  var nbr_tuyaux = 10;
+  var nbr_tuyaux = 5;
   var decalage_tuyaux_x = 0;
   let espacement_tuyaux_x = 200
   var position_x_premier_tuyau = 300;
-  var position_y_premier_tuyau = 300;
-
+  var ratio_taille_tuyaux = 4;
+  // ne pas changer les dimensions des images pour ne pas les déformer. Utiliser plutot le RATIO
+  let largeur_tuyau = 244;
+  let hauteur_tuyau = 1499;
 
   for(i = 0; i <= nbr_tuyaux; i++) {
-    tuyaux[i] = new Tuyau(img_tuyau, position_x_premier_tuyau + decalage_tuyaux_x, position_y_premier_tuyau, 244 / 2, 1499 / 2);
+    tuyaux[i] = new Tuyau(img_tuyau, position_x_premier_tuyau + decalage_tuyaux_x, random(400,500), largeur_tuyau / ratio_taille_tuyaux, hauteur_tuyau / ratio_taille_tuyaux);
     decalage_tuyaux_x += espacement_tuyaux_x;
     tuyaux[i].afficherTuyau();
   }
+  noLoop();
 }
