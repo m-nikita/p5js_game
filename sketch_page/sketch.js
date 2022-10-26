@@ -19,9 +19,10 @@ let end = false;
 let gameHeight = 600;
 let gameWidth;
 
-let boutonRecommencer;
 
 let boutonJouer;
+let boutonRecommencer;
+let boutonAccueil;
 
 let gameIsStart = false;
 
@@ -81,16 +82,35 @@ function setup() {
 
   nbObstacles = createSlider(10, 100, 20, 5);
   nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 117);
+  nbObstacles.hide();
 
   boutonJouer = createButton("Jouer");
   boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + 200);
-  boutonJouer.mousePressed(initialisation);
+  boutonJouer.mousePressed(function() {
+    gameIsStart = true;
+    initialisation();
+  });
   boutonJouer.size(100,20);
   boutonJouer.hide();
 
+  boutonAccueil = createButton("Accueil");
+  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + 200);
+  boutonAccueil.mousePressed(function() { 
+    boutonAccueil.hide();
+    gameIsStart = false; 
+    initialisation();
+  });
+  boutonAccueil.size(100,20);
+  boutonAccueil.hide();
+
   boutonRecommencer = createButton("Recommencer");
-  boutonRecommencer.position(gameWidth / 2 + 100, gameHeight / 2 + 200);
-  boutonRecommencer.mousePressed(initialisation);
+  boutonRecommencer.position(gameWidth / 2 + 90, gameHeight / 2 + 200);
+  boutonRecommencer.mousePressed(function() {
+    boutonAccueil.hide();
+    gameIsStart = true;
+    initialisation();
+  });
+  boutonRecommencer.size(100,20);
   boutonRecommencer.hide();
 }
 
@@ -110,6 +130,7 @@ function draw() {
     text("Bienvenue !", gameWidth / 2 - 80,gameHeight / 2 - 60);
     textSize(20);
     text("Nombres de tuyaux : " + nbObstacles.value(), gameWidth / 2 - 175,gameHeight / 2);
+    nbObstacles.show();
     textSize(26);
     text("Cliquez ci-dessous pour jouer :", gameWidth / 2 - 175,gameHeight / 2 + 40);
     boutonJouer.show();
@@ -142,6 +163,7 @@ function draw() {
       fill(255);
       textSize(32);
       text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
+      boutonAccueil.show();
       boutonRecommencer.show();
     }
     countScore();
@@ -209,8 +231,8 @@ function initialisation() {
   planeX = 0;
   planeY = gameHeight / 2 - (planeHeight / 2);
   score = 0;
-  gameIsStart = true;
   end = false;
+  nbObstacles.hide();
   boutonJouer.hide();
   boutonRecommencer.hide();
 }
