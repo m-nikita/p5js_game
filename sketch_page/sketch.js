@@ -7,6 +7,7 @@ let speedPlane = 2;
 let score = 0;
 
 let obstacles = [];
+let nbObstacles;
 
 let boutonsEcranTactile = [];
 
@@ -19,6 +20,10 @@ let gameHeight = 600;
 let gameWidth;
 
 let boutonRecommencer;
+
+let boutonJouer;
+
+let gameIsStart = false;
 
 /* full screening will change the size of the canvas */
 function windowResized() {
@@ -35,6 +40,12 @@ document.ontouchmove = function(event) {
 function setup() {
   gameWidth = windowWidth - 10;
   createCanvas(gameWidth, 600);
+
+  var ratio = plane.height / plane.width;
+  planeWidth = 100;
+  planeHeight = planeWidth * ratio;
+  planeY = gameHeight / 2 - (planeHeight / 2);
+
   let obstacle1 = new Map();
   obstacle1.set("x", 200);
   obstacle1.set("y", 0);
@@ -49,12 +60,6 @@ function setup() {
   obstacle2.set("height", 350);
   obstacle2.set("check", false);
   obstacles[1] = obstacle2;
-  
-  /*let buttonPlay = createButton('Play');
-  buttonPlay.position(300,200);
-  buttonPlay.mousePressed(function() {
-    fullscreen(true);
-  });*/
 
   boutonsEcranTactile.push(createButton('◀︎'));
   boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + 80);
@@ -74,6 +79,15 @@ function setup() {
     boutonsEcranTactile[i].mouseReleased(function() { locked = false; });
   }
 
+  nbObstacles = createSlider(10, 100, 20, 5);
+  nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 117);
+
+  boutonJouer = createButton("Jouer");
+  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + 200);
+  boutonJouer.mousePressed(initialisation);
+  boutonJouer.size(100,20);
+  boutonJouer.hide();
+
   boutonRecommencer = createButton("Recommencer");
   boutonRecommencer.position(gameWidth / 2 + 100, gameHeight / 2 + 200);
   boutonRecommencer.mousePressed(initialisation);
@@ -82,50 +96,60 @@ function setup() {
 
 function preload() {
   plane = loadImage("avion.png");
-  fullscreen(true);
 }
 
 function draw() {
   background(200);
-  fill(0);
-  fill(255,0,0);
-  rect(obstacles[0].get("x"), obstacles[0].get("y"), obstacles[0].get("width"), obstacles[0].get("height"));
-  rect(obstacles[1].get("x"), obstacles[1].get("y"), obstacles[1].get("width"), obstacles[1].get("height"));
-  if(locked) {
-    move(direction);
-  }
-
-  if(!detectCollision()) {
-    if(keyIsDown(LEFT_ARROW)) {
-      move(LEFT_ARROW);
-    }
-    if(keyIsDown(UP_ARROW)) {
-      move(UP_ARROW);
-    }
-    if(keyIsDown(RIGHT_ARROW)) {
-      move(RIGHT_ARROW);
-    }
-    if(keyIsDown(DOWN_ARROW)) {
-      move(DOWN_ARROW);
-    }
-  } else {
-    end = true;
-    fill(0);
+  if(!gameIsStart) {
+    stroke(0);
+    strokeWeight(2);
+    fill(29,184,0);
     rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
     fill(255);
     textSize(32);
-    text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
-    boutonRecommencer.show();
+    text("Bienvenue !", gameWidth / 2 - 80,gameHeight / 2 - 60);
+    textSize(20);
+    text("Nombres de tuyaux : " + nbObstacles.value(), gameWidth / 2 - 175,gameHeight / 2);
+    textSize(26);
+    text("Cliquez ci-dessous pour jouer :", gameWidth / 2 - 175,gameHeight / 2 + 40);
+    boutonJouer.show();
+  } else {
+    noStroke();
+    fill(255,0,0);
+    rect(obstacles[0].get("x"), obstacles[0].get("y"), obstacles[0].get("width"), obstacles[0].get("height"));
+    rect(obstacles[1].get("x"), obstacles[1].get("y"), obstacles[1].get("width"), obstacles[1].get("height"));
+    if(locked) {
+      move(direction);
+    }
+
+    if(!detectCollision()) {
+      if(keyIsDown(LEFT_ARROW)) {
+        move(LEFT_ARROW);
+      }
+      if(keyIsDown(UP_ARROW)) {
+        move(UP_ARROW);
+      }
+      if(keyIsDown(RIGHT_ARROW)) {
+        move(RIGHT_ARROW);
+      }
+      if(keyIsDown(DOWN_ARROW)) {
+        move(DOWN_ARROW);
+      }
+    } else {
+      end = true;
+      fill(0);
+      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
+      fill(255);
+      textSize(32);
+      text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
+      boutonRecommencer.show();
+    }
+    countScore();
+    fill(0);
+    textSize(32);
+    text("Score : " + score, windowWidth - 180, 30);
   }
-  // Ratio afin de ne pas déformer l'image
-  var ratio = plane.height / plane.width;
-  planeWidth = 100;
-  planeHeight = planeWidth * ratio;
   image(plane, planeX, planeY, planeWidth, planeHeight);
-  countScore();
-  fill(0);
-  textSize(32);
-  text("Score : " + score, windowWidth - 180, 30);
 }
 
 function detectCollision() {
@@ -183,8 +207,10 @@ function move(direction) {
 
 function initialisation() {
   planeX = 0;
-  planeY = 0;
+  planeY = gameHeight / 2 - (planeHeight / 2);
   score = 0;
+  gameIsStart = true;
   end = false;
+  boutonJouer.hide();
   boutonRecommencer.hide();
 }
