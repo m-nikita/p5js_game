@@ -5,10 +5,10 @@ var planeWidth;
 var planeHeight;
 let planeX = 0;
 let planeY = 0;
-let speedPlane = 4;
+let speedPlane = 10;
 let score = 0;
 
-let obstacles = [];
+//let obstacles = [];
 let nbObstacles;
 
 let boutonsEcranTactile = [];
@@ -34,12 +34,11 @@ let img_tuyau_haut;
 
 var TuyauxBas = [];
 var TuyauxHaut = [];
-var nbrPairesTuyauxTotal = 15;
-var espaceHorizontalEntreTuyaux = 1250;
+var espaceHorizontalEntreTuyaux = 850;
 var espaceVerticalEntreTuyaux = 100;
 var compteurPairesTuyauxAjoutes = 0;
 var nbrPairesTuyauxMaxAtteint = false;
-var vitesseDeplacementTuyaux = 5;
+var vitesseDeplacementTuyaux = 7;
 let timer = 0;
 
 /* full screening will change the size of the canvas */
@@ -97,7 +96,7 @@ function setup() {
     boutonsEcranTactile[i].mouseReleased(function() { locked = false; });
   }
 
-  nbObstacles = createSlider(10, 100, 20, 5);
+  nbObstacles = createSlider(10, 100, 15, 5);
   nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 117);
   nbObstacles.hide();
 
@@ -193,7 +192,7 @@ function draw() {
     text("Score : " + score, windowWidth - 180, 30);
 
     //Condition d'arrêt pour stopper la génération des tuyaux si nombre de paires de tuyaux max est atteint
-    if(compteurPairesTuyauxAjoutes == nbrPairesTuyauxTotal) {
+    if(compteurPairesTuyauxAjoutes == nbObstacles.value()) {
       nbrPairesTuyauxMaxAtteint = true;
     }
 
@@ -238,7 +237,7 @@ function draw() {
         compteurPairesTuyauxAjoutes++;
         console.log("Ajout d'une paire de tuyaux à l'écran")
         console.log("Nombre de paires de tuyaux à l'écran : " + TuyauxBas.length)
-        console.log("Nombre de paires de tuyaux ajoutés depuis le début : " + compteurPairesTuyauxAjoutes + "/" + nbrPairesTuyauxTotal);
+        console.log("Nombre de paires de tuyaux ajoutés depuis le début : " + compteurPairesTuyauxAjoutes + "/" + nbObstacles.value());
         timer = millis();
       }
     }
@@ -251,7 +250,7 @@ function draw() {
 function detectCollision() {
   var collision = false;
   var index = 0;
-  while(!collision && index < nbrPairesTuyauxTotal) {
+  while(!collision && index < nbObstacles.value()) {
     if (TuyauxBas[index] != undefined && planeX < TuyauxBas[index].getPositionX() + TuyauxBas[index].getLargeurTuyau() &&
       planeX + planeWidth > TuyauxBas[index].getPositionX() &&
       planeY < TuyauxBas[index].getPositionY() + TuyauxBas[index].getHauteurTuyau() &&
@@ -272,7 +271,7 @@ function detectCollision() {
 }
 
 function countScore() {
-  for(var i = 0; i < nbrPairesTuyauxTotal; i += 1) {
+  for(var i = 0; i < nbObstacles.value(); i += 1) {
     if (TuyauxBas[i] != undefined && planeX > TuyauxBas[i].getPositionX() + TuyauxBas[i].getLargeurTuyau()) {
       if(!TuyauxBas[i].getEtatTuyau()) {
         TuyauxBas[i].setEtatTuyau(true);
@@ -310,7 +309,7 @@ function move(direction) {
 }
 
 function initialisation() {
-  //console.clear();
+  console.clear();
   planeX = 0;
   planeY = gameHeight / 2 - (planeHeight / 2);
   score = 0;
@@ -320,7 +319,7 @@ function initialisation() {
   boutonRecommencer.hide();
   TuyauxBas = [];
   TuyauxHaut = [];
-  vitesseDeplacementTuyaux = 5;
+  vitesseDeplacementTuyaux = 6;
   compteurPairesTuyauxAjoutes = 0;
   timer = 0;
   nbrPairesTuyauxMaxAtteint = false;
