@@ -155,41 +155,6 @@ function draw() {
     text("Cliquez ci-dessous pour jouer :", gameWidth / 2 - 175,gameHeight / 2 + 40);
     boutonJouer.show();
   } else {
-    noStroke();
-    // fill(255,0,0);
-    // rect(obstacles[0].get("x"), obstacles[0].get("y"), obstacles[0].get("width"), obstacles[0].get("height"));
-    // rect(obstacles[1].get("x"), obstacles[1].get("y"), obstacles[1].get("width"), obstacles[1].get("height"));
-    if(locked) {
-      move(direction);
-    }
-
-    if(!detectCollision()) {
-      if(keyIsDown(LEFT_ARROW)) {
-        move(LEFT_ARROW);
-      }
-      if(keyIsDown(UP_ARROW)) {
-        move(UP_ARROW);
-      }
-      if(keyIsDown(RIGHT_ARROW)) {
-        move(RIGHT_ARROW);
-      }
-      if(keyIsDown(DOWN_ARROW)) {
-        move(DOWN_ARROW);
-      }
-    } else {
-      end = true;
-      fill(0);
-      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
-      fill(255);
-      textSize(32);
-      text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
-      boutonAccueil.show();
-      boutonRecommencer.show();
-    }
-    countScore();
-    fill(0);
-    textSize(32);
-    text("Score : " + score, windowWidth - 180, 30);
 
     //Condition d'arrêt pour stopper la génération des tuyaux si nombre de paires de tuyaux max est atteint
     if(compteurPairesTuyauxAjoutes == nbObstacles.value()) {
@@ -242,7 +207,42 @@ function draw() {
       }
     }
 
+    noStroke();
+    // fill(255,0,0);
+    // rect(obstacles[0].get("x"), obstacles[0].get("y"), obstacles[0].get("width"), obstacles[0].get("height"));
+    // rect(obstacles[1].get("x"), obstacles[1].get("y"), obstacles[1].get("width"), obstacles[1].get("height"));
+    if(locked) {
+      move(direction);
+    }
 
+    if(!detectCollision()) {
+      if(keyIsDown(LEFT_ARROW)) {
+        move(LEFT_ARROW);
+      }
+      if(keyIsDown(UP_ARROW)) {
+        move(UP_ARROW);
+      }
+      if(keyIsDown(RIGHT_ARROW)) {
+        move(RIGHT_ARROW);
+      }
+      if(keyIsDown(DOWN_ARROW)) {
+        move(DOWN_ARROW);
+      }
+    } else {
+      end = true;
+      fill(0);
+      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
+      fill(255);
+      textSize(32);
+      text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
+      boutonAccueil.show();
+      boutonRecommencer.show();
+      plane.hide();
+    }
+    countScore();
+    fill(0);
+    textSize(32);
+    text("Score : " + score, windowWidth - 180, 30);
   }
   image(plane, planeX, planeY, planeWidth, planeHeight);
 }
