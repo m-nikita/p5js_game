@@ -5,7 +5,7 @@ var planeWidth;
 var planeHeight;
 let planeX = 0;
 let planeY = 0;
-let speedPlane = 3;
+let speedPlane = 4;
 let score = 0;
 
 let obstacles = [];
@@ -310,7 +310,7 @@ function move(direction) {
 }
 
 function initialisation() {
-  console.clear();
+  //console.clear();
   planeX = 0;
   planeY = gameHeight / 2 - (planeHeight / 2);
   score = 0;
@@ -323,6 +323,7 @@ function initialisation() {
   vitesseDeplacementTuyaux = 5;
   compteurPairesTuyauxAjoutes = 0;
   timer = 0;
+  nbrPairesTuyauxMaxAtteint = false;
 }
 
 class Tuyau {
