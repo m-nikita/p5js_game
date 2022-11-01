@@ -140,6 +140,7 @@ function preload() {
 
 function draw() {
   background(200);
+  image(plane, planeX, planeY, planeWidth, planeHeight);
   if(!gameIsStart) {
     stroke(0);
     strokeWeight(2);
@@ -237,14 +238,13 @@ function draw() {
       text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
       boutonAccueil.show();
       boutonRecommencer.show();
-      plane.hide();
     }
     countScore();
     fill(0);
     textSize(32);
     text("Score : " + score, windowWidth - 180, 30);
   }
-  image(plane, planeX, planeY, planeWidth, planeHeight);
+  
 }
 
 function detectCollision() {
