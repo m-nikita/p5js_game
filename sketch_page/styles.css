@@ -1,3 +1,8 @@
+body{
+  margin: 0;
+  overflow:hidden;
+}
+
 .red-text {
   color: #FF5963;
 }
