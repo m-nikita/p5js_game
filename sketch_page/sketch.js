@@ -5,7 +5,7 @@ var planeWidth;
 var planeHeight;
 let planeX = 0;
 let planeY = 0;
-let speedPlane = 2;
+let speedPlane = 3;
 let score = 0;
 
 let obstacles = [];
@@ -40,7 +40,6 @@ var espaceVerticalEntreTuyaux = 100;
 var compteurPairesTuyauxAjoutes = 0;
 var nbrPairesTuyauxMaxAtteint = false;
 var vitesseDeplacementTuyaux = 5;
-var gameIsPlaying = true;
 let timer = 0;
 
 /* full screening will change the size of the canvas */
@@ -64,20 +63,21 @@ function setup() {
   planeHeight = planeWidth * ratio;
   planeY = gameHeight / 2 - (planeHeight / 2);
 
-  let obstacle1 = new Map();
-  obstacle1.set("x", 200);
-  obstacle1.set("y", 0);
-  obstacle1.set("width", 100);
-  obstacle1.set("height", 150);
-  obstacle1.set("check", false);
-  obstacles[0] = obstacle1;
-  let obstacle2 = new Map();
-  obstacle2.set("x", 200);
-  obstacle2.set("y", 250);
-  obstacle2.set("width", 100);
-  obstacle2.set("height", 350);
-  obstacle2.set("check", false);
-  obstacles[1] = obstacle2;
+  // let obstacle1 = new Map();
+  // obstacle1.set("x", 200);
+  // obstacle1.set("y", 0);
+  // obstacle1.set("width", 100);
+  // obstacle1.set("height", 150);
+  // obstacle1.set("check", false);
+  // obstacles[0] = obstacle1;
+
+  // let obstacle2 = new Map();
+  // obstacle2.set("x", 200);
+  // obstacle2.set("y", 250);
+  // obstacle2.set("width", 100);
+  // obstacle2.set("height", 350);
+  // obstacle2.set("check", false);
+  // obstacles[1] = obstacle2;
 
   boutonsEcranTactile.push(createButton('◀︎'));
   boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + 80);
@@ -157,9 +157,9 @@ function draw() {
     boutonJouer.show();
   } else {
     noStroke();
-    fill(255,0,0);
-    rect(obstacles[0].get("x"), obstacles[0].get("y"), obstacles[0].get("width"), obstacles[0].get("height"));
-    rect(obstacles[1].get("x"), obstacles[1].get("y"), obstacles[1].get("width"), obstacles[1].get("height"));
+    // fill(255,0,0);
+    // rect(obstacles[0].get("x"), obstacles[0].get("y"), obstacles[0].get("width"), obstacles[0].get("height"));
+    // rect(obstacles[1].get("x"), obstacles[1].get("y"), obstacles[1].get("width"), obstacles[1].get("height"));
     if(locked) {
       move(direction);
     }
@@ -192,7 +192,7 @@ function draw() {
     textSize(32);
     text("Score : " + score, windowWidth - 180, 30);
 
-    //Condition d'arrêt pour stopper la génération des tuyaux
+    //Condition d'arrêt pour stopper la génération des tuyaux si nombre de paires de tuyaux max est atteint
     if(compteurPairesTuyauxAjoutes == nbrPairesTuyauxTotal) {
       nbrPairesTuyauxMaxAtteint = true;
     }
@@ -229,8 +229,8 @@ function draw() {
       }
     }
 
-    //Conidition de génération des tuyaux
-    if (nbrPairesTuyauxMaxAtteint == false) {
+    //Condition de génération des tuyaux
+    if (nbrPairesTuyauxMaxAtteint == false && end != true) {
       if (millis() >= espaceHorizontalEntreTuyaux + timer) {
         valeurAleatoire = random(-(gameHeight/3.75),(gameHeight/3.75))
         TuyauxBas.push(new Tuyau(img_tuyau_bas, this.position_x_tuyau, ((gameHeight/2) + espaceVerticalEntreTuyaux)+valeurAleatoire, this.largeur_tuyau, this.hauteur_tuyau));
@@ -251,12 +251,20 @@ function draw() {
 function detectCollision() {
   var collision = false;
   var index = 0;
-  while(!collision && index < obstacles.length) {
-    if (planeX < obstacles[index].get("x") + obstacles[index].get("width") &&
-      planeX + planeWidth > obstacles[index].get("x") &&
-      planeY < obstacles[index].get("y") + obstacles[index].get("height") &&
-      planeHeight + planeY > obstacles[index].get("y")) {
+  while(!collision && index < nbrPairesTuyauxTotal) {
+    if (TuyauxBas[index] != undefined && planeX < TuyauxBas[index].getPositionX() + TuyauxBas[index].getLargeurTuyau() &&
+      planeX + planeWidth > TuyauxBas[index].getPositionX() &&
+      planeY < TuyauxBas[index].getPositionY() + TuyauxBas[index].getHauteurTuyau() &&
+      planeHeight + planeY > TuyauxBas[index].getPositionY()) {
         collision = true;
+        vitesseDeplacementTuyaux = 0;
+    }
+    if (TuyauxHaut[index] != undefined && planeX < TuyauxHaut[index].getPositionX() + TuyauxHaut[index].getLargeurTuyau() &&
+      planeX + planeWidth > TuyauxHaut[index].getPositionX() &&
+      planeY < TuyauxHaut[index].getPositionY() + TuyauxHaut[index].getHauteurTuyau() &&
+      planeHeight + planeY > TuyauxHaut[index].getPositionY()) {
+        collision = true;
+        vitesseDeplacementTuyaux = 0;
     }
     index++;
   }
@@ -264,11 +272,11 @@ function detectCollision() {
 }
 
 function countScore() {
-  for(var i = 0; i < obstacles.length; i += 2) {
-    if(planeX > obstacles[i].get("x") + obstacles[i].get("width")) {
-      if(!obstacles[i].get("check")) {
-        obstacles[i].set("check", true);
-        score++;
+  for(var i = 0; i < nbrPairesTuyauxTotal; i += 1) {
+    if (TuyauxBas[i] != undefined && planeX > TuyauxBas[i].getPositionX() + TuyauxBas[i].getLargeurTuyau()) {
+      if(!TuyauxBas[i].getEtatTuyau()) {
+        TuyauxBas[i].setEtatTuyau(true);
+        score += 2;
       }
     }
   }
@@ -302,6 +310,7 @@ function move(direction) {
 }
 
 function initialisation() {
+  console.clear();
   planeX = 0;
   planeY = gameHeight / 2 - (planeHeight / 2);
   score = 0;
@@ -309,6 +318,11 @@ function initialisation() {
   nbObstacles.hide();
   boutonJouer.hide();
   boutonRecommencer.hide();
+  TuyauxBas = [];
+  TuyauxHaut = [];
+  vitesseDeplacementTuyaux = 5;
+  compteurPairesTuyauxAjoutes = 0;
+  timer = 0;
 }
 
 class Tuyau {
@@ -319,7 +333,7 @@ class Tuyau {
     this.position_y_tuyau = position_y_tuyau;
     this.largeur_tuyau = largeur_tuyau;
     this.hauteur_tuyau = hauteur_tuyau;
-    this.etat = false;
+    this.etatTuyau = false;
   }
 
   getPositionX() {
@@ -336,6 +350,17 @@ class Tuyau {
 
   getHauteurTuyau() {
     return this.hauteur_tuyau;
+  }
+
+  getEtatTuyau() {
+    return this.etatTuyau;
+  }
+
+  setEtatTuyau(etatTuyau) {
+    if (typeof etatTuyau === 'boolean'){
+      this.etatTuyau = etatTuyau;
+      return this.etatTuyau;
+    }
   }
 
   afficherTuyau() {
