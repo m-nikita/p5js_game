@@ -1,19 +1,17 @@
-var Tuyaux = [];
-var nbrTuyauxTotal = 5;
-var espaceEntreTuyaux = 200;
-var compteurTuyauxAjoutes = 0;
-
+var TuyauxBas = [];
+var TuyauxHaut = [];
+var nbrPairesTuyauxTotal = 15;
+var espaceHorizontalEntreTuyaux = 1250;
+var espaceVerticalEntreTuyaux = 200;
+var compteurPairesTuyauxAjoutes = 0;
+var nbrPairesTuyauxMaxAtteint = false;
 let timer = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  img_tuyau = loadImage('assets/img/tuyau.png')
-
-  // création des tuyaux
-  // for (t = 0; t < nbrTuyauxTotal; t++) {
-  //   Tuyaux[t] = new Tuyau(this.image_tuyau, this.position_x_tuyau, this.position_y_tuyau, this.largeur_tuyau, this.hauteur_tuyau);
-  // }
+  img_tuyau_bas = loadImage('assets/img/tuyau_bas.png');
+  img_tuyau_haut = loadImage('assets/img/tuyau_haut.png');
 
 }
 
@@ -21,63 +19,46 @@ function draw() {
 
   background(240);
 
-  //ellipse
-  fill(250, 118, 222);
-  ellipse(mouseX, 200, 64, 64);
-
-  if (Tuyaux.length < nbrTuyauxTotal) {
-    if (millis() >= 1000 + timer) {
-      Tuyaux.push(new Tuyau(this.image_tuyau, this.position_x_tuyau, this.position_y_tuyau, this.largeur_tuyau, this.hauteur_tuyau));
-      compteurTuyauxAjoutes += 1;
-      timer = millis();
-    }
+  if(compteurPairesTuyauxAjoutes == nbrPairesTuyauxTotal) {
+    nbrPairesTuyauxMaxAtteint = true;
   }
 
-  if (Tuyaux[0] != undefined) {
-    for (i = 0; i < Tuyaux.length; i++) {
-      Tuyaux[i].afficherTuyau();
-      Tuyaux[i].deplacerTuyau();
-      if (Tuyaux[i].position_x_tuyau <= 0 - Tuyaux[i].largeur_tuyau) {
-        Tuyaux.shift();
+  if (TuyauxBas[0] != undefined) {
+    for (i = 0; i < TuyauxBas.length; i++) {
+      TuyauxBas[i].afficherTuyau();
+      TuyauxBas[i].deplacerTuyau();
+      if (TuyauxBas[i].position_x_tuyau <= 0 - TuyauxBas[i].largeur_tuyau) {
+        TuyauxBas.shift();
+        console.log("Suppresion d'un tuyau bas de l'écran")
+        console.log("Nombre de tuyaux bas à l'écran : " + TuyauxBas.length)
       }
     }
   }
 
+  if (TuyauxHaut[0] != undefined) {
+    for (i = 0; i < TuyauxHaut.length; i++) {
+      TuyauxHaut[i].afficherTuyau();
+      TuyauxHaut[i].deplacerTuyau();
+      if (TuyauxHaut[i].position_x_tuyau <= 0 - TuyauxHaut[i].largeur_tuyau) {
+        TuyauxHaut.shift();
+        console.log("Suppresion d'un tuyau haut de l'écran")
+        console.log("Nombre de tuyaux haut à l'écran : " + TuyauxHaut.length)
+      }
+    }
+  }
 
-
-  // if(Tuyaux[compteurTuyauxAjoutes].position_x_tuyau == 0 - Tuyaux[compteurTuyauxAjoutes].largeur_tuyau) {
-  //   console.log("Le tuyaux "[compteurTuyauxAjoutes] + " ")
-  //   Tuyaux[compteurTuyauxAjoutes].pop();
-  // }
-
-
-
-
-
-  // if (Tuyaux[0].position_x_tuyau <= windowWidth - espaceEntreTuyaux) {
-  //   Tuyaux[1].afficherTuyau();
-  //   Tuyaux[1].deplacerTuyau();
-  //   console.log("test");
-  //   console.log(Tuyaux.length);
-
-  //   if (Tuyaux[1].position_x_tuyau <= windowWidth - espaceEntreTuyaux) {
-  //     Tuyaux[2].afficherTuyau();
-  //     Tuyaux[2].deplacerTuyau();
-  //     console.log("test");
-  //     console.log(Tuyaux.length);
-  //   }
-  // }
-
-
-  // for (j = 0; j < Tuyaux.length; j++) {
-  //   Tuyaux[i].afficherTuyau();
-  //   Tuyaux[i].deplacerTuyau();
-  //   console.log(Tuyaux.length)
-  // }
-
-  // if (Tuyaux[i].position_x_tuyau <= windowWidth - 100) {
-  //   Tuyaux[i + 1] = new Tuyau(this.image_tuyau, this.position_x_tuyau, this.position_y_tuyau, this.largeur_tuyau, this.hauteur_tuyau);
-  // }
+  if (nbrPairesTuyauxMaxAtteint == false) {
+    if (millis() >= espaceHorizontalEntreTuyaux + timer) {
+      valeurAleatoire = random(-200,200)
+      TuyauxBas.push(new Tuyau(img_tuyau_bas, this.position_x_tuyau, (windowHeight - windowHeight/2)+valeurAleatoire+espaceVerticalEntreTuyaux, this.largeur_tuyau, this.hauteur_tuyau));
+      TuyauxHaut.push(new Tuyau(img_tuyau_haut, this.position_x_tuyau, 0 + valeurAleatoire - espaceVerticalEntreTuyaux, this.largeur_tuyau, this.hauteur_tuyau));
+      compteurPairesTuyauxAjoutes++;
+      console.log("Ajout d'une paire de tuyaux à l'écran")
+      console.log("Nombre de paires de tuyaux à l'écran : " + TuyauxBas.length)
+      console.log("Nombre de paires de tuyaux ajoutés depuis le début : " + compteurPairesTuyauxAjoutes + "/" + nbrPairesTuyauxTotal);
+      timer = millis();
+    }
+  }
 
 }
 
@@ -87,7 +68,7 @@ function windowResized() {
 
 class Tuyau {
 
-  constructor(image_tuyau = loadImage('assets/img/tuyau.png'), position_x_tuyau = windowWidth, position_y_tuyau = random(windowHeight - 200, windowHeight - 300), largeur_tuyau = 244 / 4, hauteur_tuyau = 1499 / 4) {
+  constructor(image_tuyau, position_x_tuyau = windowWidth, position_y_tuyau, largeur_tuyau = 244 / 2.5, hauteur_tuyau = 1499 / 2.5) {
     this.image_tuyau = image_tuyau;
     this.position_x_tuyau = position_x_tuyau;
     this.position_y_tuyau = position_y_tuyau;
@@ -102,7 +83,6 @@ class Tuyau {
   deplacerTuyau() {
     if (this.position_x_tuyau >= 0 - this.largeur_tuyau) {
       this.position_x_tuyau = this.position_x_tuyau - 5;
-      //console.log(this.position_x_tuyau);
     }
   }
 
