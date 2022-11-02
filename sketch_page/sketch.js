@@ -34,7 +34,7 @@ let img_tuyau_haut;
 
 var TuyauxBas = [];
 var TuyauxHaut = [];
-var espaceHorizontalEntreTuyaux = 850;
+var espaceHorizontalEntreTuyaux = 950;
 var espaceVerticalEntreTuyaux = 100;
 var compteurPairesTuyauxAjoutes = 0;
 var nbrPairesTuyauxMaxAtteint = false;
@@ -214,6 +214,17 @@ function draw() {
     // rect(obstacles[1].get("x"), obstacles[1].get("y"), obstacles[1].get("width"), obstacles[1].get("height"));
     if(locked) {
       move(direction);
+    }
+
+    if((score/2) == nbObstacles.value()){
+      end = true;
+      fill(0);
+      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
+      fill(255);
+      textSize(32);
+      text("Gagné ! Score final : " + score, gameWidth / 2 - 165,gameHeight / 2 + 8);
+      boutonAccueil.show();
+      boutonRecommencer.show();
     }
 
     if(!detectCollision()) {
