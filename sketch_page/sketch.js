@@ -5,7 +5,7 @@ var planeWidth;
 var planeHeight;
 let planeX = 0;
 let planeY = 0;
-let speedPlane = 5;
+let speedPlane = 7;
 let score = 0;
 
 //let obstacles = [];
@@ -93,7 +93,7 @@ function setup() {
     boutonsEcranTactile[i].mouseReleased(function() { locked = false; });
   }
 
-  nbObstacles = createSlider(10, 100, 15, 5);
+  nbObstacles = createSlider(10, 100, 20, 5);
   nbObstacles.parent('sketch-div');
   nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 110);
   nbObstacles.size(120,20);
@@ -158,6 +158,16 @@ function draw() {
     // Condition d'arrêt pour stopper la génération des tuyaux si nombre de paires de tuyaux max est atteint
     if(compteurPairesTuyauxAjoutes == nbObstacles.value()) {
       nbrPairesTuyauxMaxAtteint = true;
+    }
+
+    if(score == nbObstacles.value()) {
+      fill(0);
+      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
+      fill(255);
+      textSize(32);
+      text("Gagné ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
+      boutonAccueil.show();
+      boutonRecommencer.show();
     }
 
     if (TuyauxBas[0] != undefined) {
@@ -275,6 +285,9 @@ function countScore() {
         score ++;
       }
     }
+  }
+  if(score == nbObstacles.value()) {
+    end = true;
   }
 }
 
