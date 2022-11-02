@@ -5,7 +5,7 @@ var planeWidth;
 var planeHeight;
 let planeX = 0;
 let planeY = 0;
-let speedPlane = 10;
+let speedPlane = 5;
 let score = 0;
 
 //let obstacles = [];
@@ -45,6 +45,20 @@ let timer = 0;
 function windowResized() {
   gameWidth = windowWidth - 10;
   resizeCanvas(gameWidth, gameHeight);
+
+  // Repositionnement des boutons tactiles
+  boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + 80);
+  boutonsEcranTactile[1].position(gameWidth - 90, gameHeight + 30);
+  boutonsEcranTactile[2].position(gameWidth - 40, gameHeight + 80);
+  boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + 80);
+
+  // Slider choix du nombre d'obstacles
+  nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 110);
+
+  // Repositionnement des différents boutons
+  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + 200);
+  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + 200);
+  boutonRecommencer.position(gameWidth / 2 + 90, gameHeight / 2 + 200);
 }
 /* prevents the mobile browser from processing some default
  * touch events, like swiping left for "back" or scrolling the
@@ -55,49 +69,34 @@ document.ontouchmove = function(event) {
 
 function setup() {
   gameWidth = windowWidth - 10;
-  createCanvas(gameWidth, gameHeight);
+  var myCanvas = createCanvas(gameWidth, gameHeight);
+  myCanvas.parent('sketch-div');
 
   var ratio = plane.height / plane.width;
   planeWidth = 100;
   planeHeight = planeWidth * ratio;
   planeY = gameHeight / 2 - (planeHeight / 2);
 
-  // let obstacle1 = new Map();
-  // obstacle1.set("x", 200);
-  // obstacle1.set("y", 0);
-  // obstacle1.set("width", 100);
-  // obstacle1.set("height", 150);
-  // obstacle1.set("check", false);
-  // obstacles[0] = obstacle1;
-
-  // let obstacle2 = new Map();
-  // obstacle2.set("x", 200);
-  // obstacle2.set("y", 250);
-  // obstacle2.set("width", 100);
-  // obstacle2.set("height", 350);
-  // obstacle2.set("check", false);
-  // obstacles[1] = obstacle2;
-
   boutonsEcranTactile.push(createButton('◀︎'));
   boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + 80);
-
   boutonsEcranTactile.push(createButton('▲'));
   boutonsEcranTactile[1].position(gameWidth - 90, gameHeight + 30);
-
   boutonsEcranTactile.push(createButton('▶︎'));
   boutonsEcranTactile[2].position(gameWidth - 40, gameHeight + 80);
-
   boutonsEcranTactile.push(createButton('▼'));
   boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + 80);
 
   for(let i = 0; i < boutonsEcranTactile.length; i++) {
+    boutonsEcranTactile[i].parent('sketch-div');
     boutonsEcranTactile[i].size(40,40);
     boutonsEcranTactile[i].mousePressed(function() { locked = true; direction = i + LEFT_ARROW; });
     boutonsEcranTactile[i].mouseReleased(function() { locked = false; });
   }
 
   nbObstacles = createSlider(10, 100, 15, 5);
-  nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 117);
+  nbObstacles.parent('sketch-div');
+  nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 110);
+  nbObstacles.size(120,20);
   nbObstacles.hide();
 
   boutonJouer = createButton("Jouer");
@@ -156,21 +155,20 @@ function draw() {
     text("Cliquez ci-dessous pour jouer :", gameWidth / 2 - 175,gameHeight / 2 + 40);
     boutonJouer.show();
   } else {
-
-    //Condition d'arrêt pour stopper la génération des tuyaux si nombre de paires de tuyaux max est atteint
+    // Condition d'arrêt pour stopper la génération des tuyaux si nombre de paires de tuyaux max est atteint
     if(compteurPairesTuyauxAjoutes == nbObstacles.value()) {
       nbrPairesTuyauxMaxAtteint = true;
     }
 
     if (TuyauxBas[0] != undefined) {
       for (i = 0; i < TuyauxBas.length; i++) {
-        ///Condition de suppresion des tuyaux du bas lorsque ces derniers dépassent le côté gauche de l'écran
+        // Condition de suppresion des tuyaux du bas lorsque ces derniers dépassent le côté gauche de l'écran
         if (TuyauxBas[i].position_x_tuyau <= 0 - TuyauxBas[i].largeur_tuyau) {
           TuyauxBas.shift();
           console.log("Suppresion d'un tuyau bas de l'écran")
           console.log("Nombre de tuyaux bas à l'écran : " + TuyauxBas.length)
         }
-        //Condition d'affichage et de déplacement des tuyaux du bas
+        // Condition d'affichage et de déplacement des tuyaux du bas
         if(TuyauxBas.length != 0) {
           TuyauxBas[i].afficherTuyau();
           TuyauxBas[i].deplacerTuyau();
@@ -209,9 +207,8 @@ function draw() {
     }
 
     noStroke();
-    // fill(255,0,0);
-    // rect(obstacles[0].get("x"), obstacles[0].get("y"), obstacles[0].get("width"), obstacles[0].get("height"));
-    // rect(obstacles[1].get("x"), obstacles[1].get("y"), obstacles[1].get("width"), obstacles[1].get("height"));
+
+    // Blocage de la direction en cas d'appui sur un bouton sur l'écran
     if(locked) {
       move(direction);
     }
@@ -275,7 +272,7 @@ function countScore() {
     if (TuyauxBas[i] != undefined && planeX > TuyauxBas[i].getPositionX() + TuyauxBas[i].getLargeurTuyau()) {
       if(!TuyauxBas[i].getEtatTuyau()) {
         TuyauxBas[i].setEtatTuyau(true);
-        score += 2;
+        score ++;
       }
     }
   }
