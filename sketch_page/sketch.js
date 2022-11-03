@@ -5,7 +5,7 @@ var planeWidth;
 var planeHeight;
 let planeX = 0;
 let planeY = 0;
-let speedPlane = 7;
+let speedPlane = 10;
 let score = 0;
 
 //let obstacles = [];
@@ -34,7 +34,7 @@ let img_tuyau_haut;
 
 var TuyauxBas = [];
 var TuyauxHaut = [];
-var espaceHorizontalEntreTuyaux = 850;
+var espaceHorizontalEntreTuyaux = 950;
 var espaceVerticalEntreTuyaux = 100;
 var compteurPairesTuyauxAjoutes = 0;
 var nbrPairesTuyauxMaxAtteint = false;
@@ -160,16 +160,6 @@ function draw() {
       nbrPairesTuyauxMaxAtteint = true;
     }
 
-    if(score == nbObstacles.value()) {
-      fill(0);
-      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
-      fill(255);
-      textSize(32);
-      text("Gagné ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
-      boutonAccueil.show();
-      boutonRecommencer.show();
-    }
-
     if (TuyauxBas[0] != undefined) {
       for (i = 0; i < TuyauxBas.length; i++) {
         // Condition de suppresion des tuyaux du bas lorsque ces derniers dépassent le côté gauche de l'écran
@@ -221,6 +211,16 @@ function draw() {
     // Blocage de la direction en cas d'appui sur un bouton sur l'écran
     if(locked) {
       move(direction);
+    }
+
+    if((score/2) == nbObstacles.value()) {
+      fill(0);
+      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
+      fill(255);
+      textSize(32);
+      text("Gagné ! Score final : " + score, gameWidth / 2 - 165,gameHeight / 2 + 8);
+      boutonAccueil.show();
+      boutonRecommencer.show();
     }
 
     if(!detectCollision()) {
@@ -282,11 +282,11 @@ function countScore() {
     if (TuyauxBas[i] != undefined && planeX > TuyauxBas[i].getPositionX() + TuyauxBas[i].getLargeurTuyau()) {
       if(!TuyauxBas[i].getEtatTuyau()) {
         TuyauxBas[i].setEtatTuyau(true);
-        score ++;
+        score += 2;
       }
     }
   }
-  if(score == nbObstacles.value()) {
+  if((score/2) == nbObstacles.value()) {
     end = true;
   }
 }
