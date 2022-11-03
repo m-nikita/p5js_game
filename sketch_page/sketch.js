@@ -60,6 +60,8 @@ let sonCheckpointPasse;
 let sonCheckpointPasseCompteur = 0;
 let sonPartiePerdue;
 let sonPartiePerdueAEteJoue = false;
+let sonPartieGagnee;
+let sonPartieGagneeAEteJoue = false;
 
 
 /* full screening will change the size of the canvas */
@@ -93,6 +95,7 @@ function preload() {
   sonExplosion = loadSound('assets/sound/sonExplosion.wav');
   sonCheckpointPasse = loadSound('assets/sound/sonCheckpointPasse.mp3');
   sonPartiePerdue = loadSound('assets/sound/sonPartiePerdue.mp3');
+  sonPartieGagnee = loadSound('assets/sound/sonPartieGagnee.mp3');
 }
 
 function setup() {
@@ -260,6 +263,8 @@ function draw() {
 
     // Condition de victoire
     if((score/scoreMultiplicateur) == nbObstacles.value()) {
+      musiqueAmbiance.stop();
+      jouersonPartieGagnee();
       if(planeX < gameWidth + planeWidth) {
         planeX += 9;
       }
@@ -404,7 +409,9 @@ function initialisation() {
   nbrPairesTuyauxMaxAtteint = false;
   sonExplosionAEteJoue = false;
   sonPartiePerdueAEteJoue = false;
+  sonPartieGagneeAEteJoue = false;
   sonCheckpointPasseCompteur = 0;
+  eteindreLesSons();
   backgroundMusic();
 }
 
@@ -444,6 +451,26 @@ function jouersonPartiePerdue() {
     sonPartiePerdue.play();
     sonPartiePerdue.setVolume(0.2);
     sonPartiePerdueAEteJoue = true; 
+  }
+}
+
+function jouersonPartieGagnee() {
+  if(sonPartieGagneeAEteJoue == false) {
+    sonPartieGagnee.play();
+    sonPartieGagnee.setVolume(0.10);
+    sonPartieGagneeAEteJoue = true; 
+  }
+}
+
+function eteindreLesSons() {
+  if(sonPartieGagnee.isPlaying) {
+    sonPartieGagnee.stop();
+  }
+  if(sonPartiePerdue.isPlaying) {
+    sonPartiePerdue.stop();
+  }
+  if(sonExplosion.isPlaying) {
+    sonExplosion.stop();
   }
 }
 
