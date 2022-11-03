@@ -1,4 +1,4 @@
-//AVION
+// AVION
 
 let planeHidden;
 
@@ -54,19 +54,7 @@ function windowResized() {
   gameWidth = windowWidth - 10;
   resizeCanvas(gameWidth, gameHeight);
 
-  // Repositionnement des boutons tactiles
-  boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + 80);
-  boutonsEcranTactile[1].position(gameWidth - 90, gameHeight + 30);
-  boutonsEcranTactile[2].position(gameWidth - 40, gameHeight + 80);
-  boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + 80);
-
-  // Slider choix du nombre d'obstacles
-  nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 110);
-
-  // Repositionnement des différents boutons
-  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + 200);
-  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + 200);
-  boutonRecommencer.position(gameWidth / 2 + 90, gameHeight / 2 + 200);
+  positionsBoutons();
 }
 /* prevents the mobile browser from processing some default
  * touch events, like swiping left for "back" or scrolling the
@@ -91,13 +79,9 @@ function setup() {
   planeCrashY = gameHeight / 2 - (planeCrashHeight / 2);
 
   boutonsEcranTactile.push(createButton('◀︎'));
-  boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + 80);
   boutonsEcranTactile.push(createButton('▲'));
-  boutonsEcranTactile[1].position(gameWidth - 90, gameHeight + 30);
   boutonsEcranTactile.push(createButton('▶︎'));
-  boutonsEcranTactile[2].position(gameWidth - 40, gameHeight + 80);
   boutonsEcranTactile.push(createButton('▼'));
-  boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + 80);
 
   for(let i = 0; i < boutonsEcranTactile.length; i++) {
     boutonsEcranTactile[i].parent('sketch-div');
@@ -106,14 +90,12 @@ function setup() {
     boutonsEcranTactile[i].mouseReleased(function() { locked = false; });
   }
 
-  nbObstacles = createSlider(10, 100, 20, 5);
+  nbObstacles = createSlider(10, 100, 1, 5);
   nbObstacles.parent('sketch-div');
-  nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 110);
   nbObstacles.size(120,20);
   nbObstacles.hide();
 
   boutonJouer = createButton("Jouer");
-  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + 200);
   boutonJouer.mousePressed(function() {
     gameIsStart = true;
     initialisation();
@@ -122,7 +104,6 @@ function setup() {
   boutonJouer.hide();
 
   boutonAccueil = createButton("Accueil");
-  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + 200);
   boutonAccueil.mousePressed(function() { 
     boutonAccueil.hide();
     gameIsStart = false; 
@@ -132,7 +113,6 @@ function setup() {
   boutonAccueil.hide();
 
   boutonRecommencer = createButton("Recommencer");
-  boutonRecommencer.position(gameWidth / 2 + 90, gameHeight / 2 + 200);
   boutonRecommencer.mousePressed(function() {
     boutonAccueil.hide();
     gameIsStart = true;
@@ -140,6 +120,24 @@ function setup() {
   });
   boutonRecommencer.size(100,20);
   boutonRecommencer.hide();
+
+  positionsBoutons();
+}
+
+function positionsBoutons() {
+  // Repositionnement des boutons tactiles
+  boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + 80);
+  boutonsEcranTactile[1].position(gameWidth - 90, gameHeight + 30);
+  boutonsEcranTactile[2].position(gameWidth - 40, gameHeight + 80);
+  boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + 80);
+
+  // Slider choix du nombre d'obstacles
+  nbObstacles.position(gameWidth / 2 + 60,gameHeight / 2 + 110);
+
+  // Repositionnement des différents boutons
+  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + 200);
+  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + 200);
+  boutonRecommencer.position(gameWidth / 2 + 90, gameHeight / 2 + 200);
 }
 
 function preload() {
