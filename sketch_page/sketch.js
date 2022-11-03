@@ -51,13 +51,15 @@ var nbrPairesTuyauxMaxAtteint = false;
 var vitesseDeplacementTuyaux = 7;
 let timer = 0;
 
-// SOUND
+// SONS
 
 let musiqueAmbiance;
 let sonExplosion;
 let sonExplosionAEteJoue = false;
 let sonCheckpointPasse;
 let sonCheckpointPasseCompteur = 0;
+let sonPartiePerdue;
+let sonPartiePerdueAEteJoue = false;
 
 
 /* full screening will change the size of the canvas */
@@ -90,6 +92,7 @@ function preload() {
   musiqueAmbiance = loadSound('assets/sound/music_1.mp3');
   sonExplosion = loadSound('assets/sound/sonExplosion.wav');
   sonCheckpointPasse = loadSound('assets/sound/sonCheckpointPasse.mp3');
+  sonPartiePerdue = loadSound('assets/sound/sonPartiePerdue.mp3');
 }
 
 function setup() {
@@ -284,6 +287,7 @@ function draw() {
       }
     } else {
 
+      musiqueAmbiance.stop();
       jouerSonExplosion();
       plane = planeHidden;
       planeCrash.play();
@@ -304,6 +308,7 @@ function draw() {
       text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
       boutonAccueil.show();
       boutonRecommencer.show();
+      jouersonPartiePerdue();
     }
     countScore();
     fill(0);
@@ -398,6 +403,7 @@ function initialisation() {
   timer = 0;
   nbrPairesTuyauxMaxAtteint = false;
   sonExplosionAEteJoue = false;
+  sonPartiePerdueAEteJoue = false;
   sonCheckpointPasseCompteur = 0;
   backgroundMusic();
 }
@@ -430,6 +436,14 @@ function jouerSonCheckpointPasse() {
     sonCheckpointPasse.play();
     sonCheckpointPasse.setVolume(0.15);
     sonCheckpointPasseCompteur += scoreMultiplicateur; 
+  }
+}
+
+function jouersonPartiePerdue() {
+  if(sonPartiePerdueAEteJoue == false) {
+    sonPartiePerdue.play();
+    sonPartiePerdue.setVolume(0.2);
+    sonPartiePerdueAEteJoue = true; 
   }
 }
 
