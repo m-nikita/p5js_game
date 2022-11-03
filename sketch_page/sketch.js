@@ -5,7 +5,7 @@ let planeHidden;
 let plane;
 var planeWidth;
 var planeHeight;
-let planeX = 0;
+let planeX = (-planeWidth);
 let planeY = 0;
 let speedPlane = 10;
 let score = 0;
@@ -170,6 +170,9 @@ function draw() {
     text("Cliquez ci-dessous pour jouer :", gameWidth / 2 - 175,gameHeight / 2 + 40);
     boutonJouer.show();
   } else {
+    if(planeX < 0) {
+      planeX += 2;
+    }
     // Condition d'arrêt pour stopper la génération des tuyaux si nombre de paires de tuyaux max est atteint
     if(compteurPairesTuyauxAjoutes == nbObstacles.value()) {
       nbrPairesTuyauxMaxAtteint = true;
@@ -350,7 +353,7 @@ function move(direction) {
 
 function initialisation() {
   console.clear();
-  planeX = 0;
+  planeX = (-planeWidth);
   planeY = gameHeight / 2 - (planeHeight / 2);
   score = 0;
   end = false;
