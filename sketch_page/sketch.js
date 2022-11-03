@@ -49,9 +49,12 @@ var nbrPairesTuyauxMaxAtteint = false;
 var vitesseDeplacementTuyaux = 7;
 let timer = 0;
 
-// MUSIQUES
+// SOUND
 
 let musiqueAmbiance;
+let sonExplosion;
+let sonExplosionAEteJoue = false;
+
 
 /* full screening will change the size of the canvas */
 function windowResized() {
@@ -78,9 +81,10 @@ function preload() {
   img_tuyau_bas = loadImage('assets/img/tuyau_bas.png');
   img_tuyau_haut = loadImage('assets/img/tuyau_haut.png');
 
-  // MUSIC
+  // SOUND
   soundFormats("mp3");
-  musiqueAmbiance = loadSound('assets/music/music_1.mp3');
+  musiqueAmbiance = loadSound('assets/sound/music_1.mp3');
+  sonExplosion = loadSound('assets/sound/8-bit-kit-explosion-1.wav');
 }
 
 function setup() {
@@ -273,6 +277,7 @@ function draw() {
       }
     } else {
 
+      jouerSonExplosion();
       plane = planeHidden;
       planeCrash.play();
 
@@ -384,6 +389,7 @@ function initialisation() {
   compteurPairesTuyauxAjoutes = 0;
   timer = 0;
   nbrPairesTuyauxMaxAtteint = false;
+  sonExplosionAEteJoue = false;
   backgroundMusic();
 }
 
@@ -399,6 +405,14 @@ function backgroundMusic() {
     musiqueAmbiance.loop();
     musiqueAmbiance.setVolume(0.10);
     userStartAudio();
+  }
+}
+
+function jouerSonExplosion() {
+  if(sonExplosionAEteJoue == false) {
+    sonExplosion.play();
+    sonExplosion.setVolume(0.10);
+    sonExplosionAEteJoue = true; 
   }
 }
 
