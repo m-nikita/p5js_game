@@ -1,5 +1,7 @@
 //AVION
 
+let planeHidden;
+
 let plane;
 var planeWidth;
 var planeHeight;
@@ -7,6 +9,12 @@ let planeX = 0;
 let planeY = 0;
 let speedPlane = 10;
 let score = 0;
+
+let planeCrash;
+var planeCrashWidth;
+var planeCrashHeight;
+let planeCrashX = 0;
+let planeCrashY = 0;
 
 //let obstacles = [];
 let nbObstacles;
@@ -77,6 +85,11 @@ function setup() {
   planeHeight = planeWidth * ratio;
   planeY = gameHeight / 2 - (planeHeight / 2);
 
+  var ratio = planeCrash.height / planeCrash.width;
+  planeCrashWidth = 100;
+  planeCrashHeight = planeCrashWidth * ratio;
+  planeCrashY = gameHeight / 2 - (planeCrashHeight / 2);
+
   boutonsEcranTactile.push(createButton('◀︎'));
   boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + 80);
   boutonsEcranTactile.push(createButton('▲'));
@@ -130,7 +143,10 @@ function setup() {
 }
 
 function preload() {
-  plane = loadImage("assets/img/avion.png");
+  plane = loadImage("assets/gif/helicopter.gif");
+  planeCrash = loadImage("assets/gif/helicopter_crash.gif");
+  planeHidden = loadImage("assets/img/no_helicopter.png");
+  planeCrash.pause();
 
   //Tuyaux skins
   img_tuyau_bas = loadImage('assets/img/tuyau_bas.png');
@@ -138,8 +154,9 @@ function preload() {
 }
 
 function draw() {
-  background(200);
-  image(plane, planeX, planeY, planeWidth, planeHeight);
+  background(250);
+  afficherAvion = image(plane, planeX, planeY, planeWidth, planeHeight);
+  // image(planeCrash, planeCrashX, planeCrashY, planeCrashWidth, planeCrashHeight);
   if(!gameIsStart) {
     stroke(0);
     strokeWeight(2);
@@ -237,7 +254,19 @@ function draw() {
         move(DOWN_ARROW);
       }
     } else {
+
+      plane = planeHidden;
+      planeCrash.play();
+
+      if (planeCrash.gifProperties.displayIndex % planeCrash.numFrames() >= 39) {
+        planeCrash.pause();
+      }
+
+      planeCrashX = planeX;
+      planeCrashY = planeY;
+      image(planeCrash, planeCrashX, planeCrashY, planeCrashWidth, planeCrashHeight);
       end = true;
+      
       fill(0);
       rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
       fill(255);
@@ -333,6 +362,7 @@ function initialisation() {
   compteurPairesTuyauxAjoutes = 0;
   timer = 0;
   nbrPairesTuyauxMaxAtteint = false;
+  preload();
 }
 
 class Tuyau {
