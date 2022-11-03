@@ -53,7 +53,8 @@ let timer = 0;
 
 // SONS
 
-let musiqueAmbiance;
+let musiqueNiveau;
+let musiqueMenu;
 let sonExplosion;
 let sonExplosionAEteJoue = false;
 let sonCheckpointPasse;
@@ -91,7 +92,8 @@ function preload() {
 
   // SOUND
   soundFormats("mp3");
-  musiqueAmbiance = loadSound('assets/sound/music_1.mp3');
+  musiqueNiveau = loadSound('assets/sound/musiqueNiveau.mp3');
+  musiqueMenu = loadSound('assets/sound/musiqueMenu.mp3');
   sonExplosion = loadSound('assets/sound/sonExplosion.wav');
   sonCheckpointPasse = loadSound('assets/sound/sonCheckpointPasse.mp3');
   sonPartiePerdue = loadSound('assets/sound/sonPartiePerdue.mp3');
@@ -132,6 +134,7 @@ function setup() {
 
   boutonJouer = createButton("Jouer");
   boutonJouer.mousePressed(function() {
+    jouerMusiqueNiveau();
     gameIsStart = true;
     initialisation();
   });
@@ -141,7 +144,8 @@ function setup() {
   boutonAccueil = createButton("Accueil");
   boutonAccueil.mousePressed(function() { 
     boutonAccueil.hide();
-    gameIsStart = false; 
+    gameIsStart = false;
+    jouerMusiqueMenu(); 
     initialisation();
   });
   boutonAccueil.size(100,20);
@@ -151,6 +155,7 @@ function setup() {
   boutonRecommencer.mousePressed(function() {
     boutonAccueil.hide();
     gameIsStart = true;
+    jouerMusiqueNiveau();
     initialisation();
   });
   boutonRecommencer.size(100,20);
@@ -158,9 +163,9 @@ function setup() {
 
   positionsBoutons();
 
-  musiqueAmbiance.play();
-  musiqueAmbiance.loop();
-  musiqueAmbiance.setVolume(0.10);
+  musiqueMenu.play();
+  musiqueMenu.loop();
+  musiqueMenu.setVolume(0.10);
   userStartAudio();
 }
 
@@ -263,8 +268,8 @@ function draw() {
 
     // Condition de victoire
     if((score/scoreMultiplicateur) == nbObstacles.value()) {
-      musiqueAmbiance.stop();
-      jouersonPartieGagnee();
+      musiqueNiveau.stop();
+      jouerSonPartieGagnee();
       if(planeX < gameWidth + planeWidth) {
         planeX += 9;
       }
@@ -292,7 +297,7 @@ function draw() {
       }
     } else {
 
-      musiqueAmbiance.stop();
+      musiqueNiveau.stop();
       jouerSonExplosion();
       plane = planeHidden;
       planeCrash.play();
@@ -313,7 +318,7 @@ function draw() {
       text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
       boutonAccueil.show();
       boutonRecommencer.show();
-      jouersonPartiePerdue();
+      jouerSonPartiePerdue();
     }
     countScore();
     fill(0);
@@ -412,22 +417,22 @@ function initialisation() {
   sonPartieGagneeAEteJoue = false;
   sonCheckpointPasseCompteur = 0;
   eteindreLesSons();
-  backgroundMusic();
 }
 
-function backgroundMusic() {
-  if(musiqueAmbiance.isPlaying()) {
-    musiqueAmbiance.stop();
-    musiqueAmbiance.play();
-    musiqueAmbiance.loop();
-    musiqueAmbiance.setVolume(0.10);
-    userStartAudio();
-  } else {
-    musiqueAmbiance.play();
-    musiqueAmbiance.loop();
-    musiqueAmbiance.setVolume(0.10);
-    userStartAudio();
+function jouerMusiqueNiveau() {
+  if(musiqueMenu.isPlaying()) {
+    musiqueMenu.stop();
   }
+  musiqueNiveau.play();
+  musiqueNiveau.setVolume(0.10);
+}
+
+function jouerMusiqueMenu() {
+  if(musiqueNiveau.isPlaying()) {
+    musiqueNiveau.stop();
+  }
+  musiqueMenu.play();
+  musiqueMenu.setVolume(0.10);
 }
 
 function jouerSonExplosion() {
@@ -446,7 +451,7 @@ function jouerSonCheckpointPasse() {
   }
 }
 
-function jouersonPartiePerdue() {
+function jouerSonPartiePerdue() {
   if(sonPartiePerdueAEteJoue == false) {
     sonPartiePerdue.play();
     sonPartiePerdue.setVolume(0.2);
@@ -454,7 +459,7 @@ function jouersonPartiePerdue() {
   }
 }
 
-function jouersonPartieGagnee() {
+function jouerSonPartieGagnee() {
   if(sonPartieGagneeAEteJoue == false) {
     sonPartieGagnee.play();
     sonPartieGagnee.setVolume(0.10);
