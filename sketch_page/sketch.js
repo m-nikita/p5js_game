@@ -35,6 +35,8 @@ let boutonAccueil;
 
 let gameIsStart = false;
 
+let scoreMultiplicateur = 2;
+
 // OBSTACLES
 
 let img_tuyau_bas;
@@ -54,6 +56,8 @@ let timer = 0;
 let musiqueAmbiance;
 let sonExplosion;
 let sonExplosionAEteJoue = false;
+let sonCheckpointPasse;
+let sonCheckpointPasseCompteur = 0;
 
 
 /* full screening will change the size of the canvas */
@@ -84,7 +88,8 @@ function preload() {
   // SOUND
   soundFormats("mp3");
   musiqueAmbiance = loadSound('assets/sound/music_1.mp3');
-  sonExplosion = loadSound('assets/sound/8-bit-kit-explosion-1.wav');
+  sonExplosion = loadSound('assets/sound/sonExplosion.wav');
+  sonCheckpointPasse = loadSound('assets/sound/sonCheckpointPasse.mp3');
 }
 
 function setup() {
@@ -188,6 +193,7 @@ function draw() {
     text("Cliquez ci-dessous pour jouer :", gameWidth / 2 - 175,gameHeight / 2 + 40);
     boutonJouer.show();
   } else {
+    // Animation d'apparition de l'avion au début de la partie
     if(planeX < 0) {
       planeX += 2;
     }
@@ -249,7 +255,8 @@ function draw() {
       move(direction);
     }
 
-    if((score/2) == nbObstacles.value()) {
+    // Condition de victoire
+    if((score/scoreMultiplicateur) == nbObstacles.value()) {
       if(planeX < gameWidth + planeWidth) {
         planeX += 9;
       }
@@ -333,12 +340,13 @@ function countScore() {
   for(var i = 0; i < nbObstacles.value(); i += 1) {
     if (TuyauxBas[i] != undefined && planeX > TuyauxBas[i].getPositionX() + TuyauxBas[i].getLargeurTuyau()) {
       if(!TuyauxBas[i].getEtatTuyau()) {
+        jouerSonCheckpointPasse();
         TuyauxBas[i].setEtatTuyau(true);
-        score += 2;
+        score += scoreMultiplicateur;
       }
     }
   }
-  if((score/2) == nbObstacles.value()) {
+  if((score/scoreMultiplicateur) == nbObstacles.value()) {
     end = true;
   }
 }
@@ -390,6 +398,7 @@ function initialisation() {
   timer = 0;
   nbrPairesTuyauxMaxAtteint = false;
   sonExplosionAEteJoue = false;
+  sonCheckpointPasseCompteur = 0;
   backgroundMusic();
 }
 
@@ -413,6 +422,14 @@ function jouerSonExplosion() {
     sonExplosion.play();
     sonExplosion.setVolume(0.10);
     sonExplosionAEteJoue = true; 
+  }
+}
+
+function jouerSonCheckpointPasse() {
+  if(sonCheckpointPasseCompteur == score) {
+    sonCheckpointPasse.play();
+    sonCheckpointPasse.setVolume(0.15);
+    sonCheckpointPasseCompteur += scoreMultiplicateur; 
   }
 }
 
