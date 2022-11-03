@@ -229,6 +229,9 @@ function draw() {
     }
 
     if((score/2) == nbObstacles.value()) {
+      if(planeX < gameWidth + planeWidth) {
+        planeX += 9;
+      }
       fill(0);
       rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
       fill(255);
