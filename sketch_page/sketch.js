@@ -49,6 +49,10 @@ var nbrPairesTuyauxMaxAtteint = false;
 var vitesseDeplacementTuyaux = 7;
 let timer = 0;
 
+// MUSIQUES
+
+let musiqueAmbiance;
+
 /* full screening will change the size of the canvas */
 function windowResized() {
   gameWidth = windowWidth - 10;
@@ -62,6 +66,22 @@ page. */
 document.ontouchmove = function(event) {
     event.preventDefault();
 };
+
+// PRELOAD must be before SETUP
+function preload() {
+  plane = loadImage("assets/gif/helicopter.gif");
+  planeCrash = loadImage("assets/gif/helicopter_crash.gif");
+  planeHidden = loadImage("assets/img/no_helicopter.png");
+  planeCrash.pause();
+
+  //Tuyaux skins
+  img_tuyau_bas = loadImage('assets/img/tuyau_bas.png');
+  img_tuyau_haut = loadImage('assets/img/tuyau_haut.png');
+
+  // MUSIC
+  soundFormats("mp3");
+  musiqueAmbiance = loadSound('assets/music/music_1.mp3');
+}
 
 function setup() {
   gameWidth = windowWidth - 10;
@@ -122,6 +142,11 @@ function setup() {
   boutonRecommencer.hide();
 
   positionsBoutons();
+
+  musiqueAmbiance.play();
+  musiqueAmbiance.loop();
+  musiqueAmbiance.setVolume(0.10);
+  userStartAudio();
 }
 
 function positionsBoutons() {
@@ -138,17 +163,6 @@ function positionsBoutons() {
   boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + 200);
   boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + 200);
   boutonRecommencer.position(gameWidth / 2 + 90, gameHeight / 2 + 200);
-}
-
-function preload() {
-  plane = loadImage("assets/gif/helicopter.gif");
-  planeCrash = loadImage("assets/gif/helicopter_crash.gif");
-  planeHidden = loadImage("assets/img/no_helicopter.png");
-  planeCrash.pause();
-
-  //Tuyaux skins
-  img_tuyau_bas = loadImage('assets/img/tuyau_bas.png');
-  img_tuyau_haut = loadImage('assets/img/tuyau_haut.png');
 }
 
 function draw() {
@@ -353,6 +367,10 @@ function move(direction) {
 
 function initialisation() {
   console.clear();
+  plane = loadImage("assets/gif/helicopter.gif");
+  planeCrash = loadImage("assets/gif/helicopter_crash.gif");
+  planeHidden = loadImage("assets/img/no_helicopter.png");
+  planeCrash.pause();
   planeX = (-planeWidth);
   planeY = gameHeight / 2 - (planeHeight / 2);
   score = 0;
@@ -366,7 +384,22 @@ function initialisation() {
   compteurPairesTuyauxAjoutes = 0;
   timer = 0;
   nbrPairesTuyauxMaxAtteint = false;
-  preload();
+  backgroundMusic();
+}
+
+function backgroundMusic() {
+  if(musiqueAmbiance.isPlaying()) {
+    musiqueAmbiance.stop();
+    musiqueAmbiance.play();
+    musiqueAmbiance.loop();
+    musiqueAmbiance.setVolume(0.10);
+    userStartAudio();
+  } else {
+    musiqueAmbiance.play();
+    musiqueAmbiance.loop();
+    musiqueAmbiance.setVolume(0.10);
+    userStartAudio();
+  }
 }
 
 class Tuyau {
