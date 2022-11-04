@@ -356,6 +356,17 @@ function countScore() {
     if (TuyauxBas[i] != undefined && planeX > TuyauxBas[i].getPositionX() + TuyauxBas[i].getLargeurTuyau()) {
       if(!TuyauxBas[i].getEtatTuyau()) {
         jouerSonCheckpointPasse();
+        
+        //Difficulté croissante
+        if(vitesseDeplacementTuyaux < 20) {
+          vitesseDeplacementTuyaux += 0.2;
+        }
+        if(speedPlane > 5) {
+          speedPlane -= 0.03;
+        }
+        espaceHorizontalEntreTuyaux -= 0.5;
+        espaceVerticalEntreTuyaux -= 0.5
+
         TuyauxBas[i].setEtatTuyau(true);
         score += scoreMultiplicateur;
       }
@@ -401,6 +412,7 @@ function initialisation() {
   planeCrash.pause();
   planeX = (-planeWidth);
   planeY = gameHeight / 2 - (planeHeight / 2);
+  speedPlane = 10;
   score = 0;
   end = false;
   nbObstacles.hide();
@@ -408,7 +420,9 @@ function initialisation() {
   boutonRecommencer.hide();
   TuyauxBas = [];
   TuyauxHaut = [];
-  vitesseDeplacementTuyaux = 6;
+  vitesseDeplacementTuyaux = 7;
+  espaceHorizontalEntreTuyaux = 950;
+  espaceVerticalEntreTuyaux = 100;
   compteurPairesTuyauxAjoutes = 0;
   timer = 0;
   nbrPairesTuyauxMaxAtteint = false;
