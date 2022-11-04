@@ -462,7 +462,7 @@ function jouerSonPartiePerdue() {
 function jouerSonPartieGagnee() {
   if(sonPartieGagneeAEteJoue == false) {
     sonPartieGagnee.play();
-    sonPartieGagnee.setVolume(0.10);
+    sonPartieGagnee.setVolume(0.05);
     sonPartieGagneeAEteJoue = true; 
   }
 }
