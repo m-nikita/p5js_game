@@ -16,7 +16,6 @@ var planeCrashHeight;
 let planeCrashX = 0;
 let planeCrashY = 0;
 
-//let obstacles = [];
 let nbObstacles;
 
 let boutonsEcranTactile = [];
@@ -64,6 +63,9 @@ let sonPartiePerdueAEteJoue = false;
 let sonPartieGagnee;
 let sonPartieGagneeAEteJoue = false;
 
+// FOND
+
+let bg;
 
 /* full screening will change the size of the canvas */
 function windowResized() {
@@ -98,12 +100,14 @@ function preload() {
   sonCheckpointPasse = loadSound('assets/sound/sonCheckpointPasse.mp3');
   sonPartiePerdue = loadSound('assets/sound/sonPartiePerdue.mp3');
   sonPartieGagnee = loadSound('assets/sound/sonPartieGagnee.mp3');
+
+  // BACKGROUND
+  bg = loadImage('assets/img/fond.png');
 }
 
 function setup() {
   gameWidth = windowWidth - 10;
-  var myCanvas = createCanvas(gameWidth, gameHeight);
-  myCanvas.parent('sketch-div');
+  myCanvas = createCanvas(gameWidth, gameHeight);
 
   var ratio = plane.height / plane.width;
   planeWidth = 100;
@@ -115,20 +119,20 @@ function setup() {
   planeCrashHeight = planeCrashWidth * ratio;
   planeCrashY = gameHeight / 2 - (planeCrashHeight / 2);
 
+  // Buttons to play with a touch screen
+
   boutonsEcranTactile.push(createButton('◀︎'));
   boutonsEcranTactile.push(createButton('▲'));
   boutonsEcranTactile.push(createButton('▶︎'));
   boutonsEcranTactile.push(createButton('▼'));
 
   for(let i = 0; i < boutonsEcranTactile.length; i++) {
-    boutonsEcranTactile[i].parent('sketch-div');
     boutonsEcranTactile[i].size(40,40);
     boutonsEcranTactile[i].mousePressed(function() { locked = true; direction = i + LEFT_ARROW; });
     boutonsEcranTactile[i].mouseReleased(function() { locked = false; });
   }
 
   nbObstacles = createSlider(10, 100, 1, 5);
-  nbObstacles.parent('sketch-div');
   nbObstacles.size(120,20);
   nbObstacles.hide();
 
@@ -182,11 +186,11 @@ function positionsBoutons() {
   // Repositionnement des différents boutons
   boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + 200);
   boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + 200);
-  boutonRecommencer.position(gameWidth / 2 + 90, gameHeight / 2 + 200);
+  boutonRecommencer.position(gameWidth / 2 + 70, gameHeight / 2 + 200);
 }
 
 function draw() {
-  background(250);
+  background(bg);
   afficherAvion = image(plane, planeX, planeY, planeWidth, planeHeight);
   // image(planeCrash, planeCrashX, planeCrashY, planeCrashWidth, planeCrashHeight);
   if(!gameIsStart) {
