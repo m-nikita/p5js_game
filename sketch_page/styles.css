@@ -3,16 +3,11 @@ body{
   overflow:hidden;
 }
 
-.red-text {
-  color: #FF5963;
+.color-text {
+  color: #5d8728;
 }
 
-.red-img {
-  border: 25px solid red;
-  border-radius: 50%;
-}
-
-table, th, td {
-    border-color: #FF5963;
-    border-style: groove;
+#game-text {
+  margin-left: 1em;
+  margin: 1em;
 }
