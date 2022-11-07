@@ -67,6 +67,10 @@ let sonPartieGagneeAEteJoue = false;
 
 let bg;
 
+let angle = 0;
+
+let isInLoop = false;
+
 /* full screening will change the size of the canvas */
 function windowResized() {
   gameWidth = windowWidth - 10;
@@ -132,7 +136,7 @@ function setup() {
     boutonsEcranTactile[i].mouseReleased(function() { locked = false; });
   }
 
-  nbObstacles = createSlider(10, 100, 1, 5);
+  nbObstacles = createSlider(1, 100, 1, 5);
   nbObstacles.size(120,20);
   nbObstacles.hide();
 
@@ -171,6 +175,7 @@ function setup() {
   musiqueMenu.loop();
   musiqueMenu.setVolume(0.10);
   userStartAudio();
+  angleMode(DEGREES);
 }
 
 function positionsBoutons() {
@@ -191,7 +196,21 @@ function positionsBoutons() {
 
 function draw() {
   background(bg);
-  afficherAvion = image(plane, planeX, planeY, planeWidth, planeHeight);
+  // Animation de fin (looping)
+  if(isInLoop) {
+    push();
+    translate(planeX, planeY - 100);
+    rotate(angle);
+    imageMode(CORNER);
+    image(plane, 0, 100, planeWidth, planeHeight);
+    angle-=3;
+    pop();
+    if(angle == -360) {
+      isInLoop = false;
+    }
+  } else {
+    image(plane, planeX, planeY, planeWidth, planeHeight);
+  }
   // image(planeCrash, planeCrashX, planeCrashY, planeCrashWidth, planeCrashHeight);
   if(!gameIsStart) {
     stroke(0);
@@ -274,8 +293,14 @@ function draw() {
     if((score/scoreMultiplicateur) == nbObstacles.value()) {
       musiqueNiveau.stop();
       jouerSonPartieGagnee();
+      // Endroit de l'écran où se produit l'animation de fin
+      if(planeX > gameWidth  * 0.75 - 10 && planeX < gameWidth * 0.75 + 10 && angle == 0) {
+        isInLoop = true;
+      }
       if(planeX < gameWidth + planeWidth) {
-        planeX += 9;
+        if(!isInLoop) {
+          planeX += 9;
+        }
       }
       fill(0);
       rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
@@ -435,6 +460,7 @@ function initialisation() {
   sonPartieGagneeAEteJoue = false;
   sonCheckpointPasseCompteur = 0;
   eteindreLesSons();
+  angle = 0;
 }
 
 function jouerMusiqueNiveau() {
