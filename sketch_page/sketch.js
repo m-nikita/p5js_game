@@ -182,18 +182,18 @@ function positionsBoutons() {
   let heightText = document.getElementById("game-text").offsetHeight;
 
   // Repositionnement des boutons tactiles
-  boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + heightText - 30);
-  boutonsEcranTactile[1].position(gameWidth - 90, gameHeight + heightText - 80);
-  boutonsEcranTactile[2].position(gameWidth - 40, gameHeight + heightText - 30);
-  boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + heightText - 30);
+  boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + heightText - 80);
+  boutonsEcranTactile[1].position(gameWidth - 90, gameHeight + heightText - 130);
+  boutonsEcranTactile[2].position(gameWidth - 40, gameHeight + heightText - 80);
+  boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + heightText - 80);
 
   // Slider choix du nombre d'obstacles
-  nbObstacles.position(gameWidth / 2 + 60, gameHeight / 2 + heightText + 3);
+  nbObstacles.position(gameWidth / 2 + 60, gameHeight / 2 + heightText - 20);
 
   // Repositionnement des différents boutons
-  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + heightText + 90);
-  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + heightText + 90);
-  boutonRecommencer.position(gameWidth / 2 + 70, gameHeight / 2 + heightText + 90);
+  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + heightText + 70);
+  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + heightText + 70);
+  boutonRecommencer.position(gameWidth / 2 + 70, gameHeight / 2 + heightText + 70);
 }
 
 function draw() {
