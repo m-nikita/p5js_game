@@ -136,7 +136,7 @@ function setup() {
     boutonsEcranTactile[i].mouseReleased(function() { locked = false; });
   }
 
-  nbObstacles = createSlider(1, 100, 1, 5);
+  nbObstacles = createSlider(10, 100, 20, 5);
   nbObstacles.size(120,20);
   nbObstacles.hide();
 
