@@ -36,6 +36,10 @@ let gameIsStart = false;
 
 let scoreMultiplicateur = 2;
 
+let angle = 0;
+
+let isInLoop = false;
+
 // OBSTACLES
 
 let img_tuyau_bas;
@@ -65,15 +69,16 @@ let sonPartieGagneeAEteJoue = false;
 
 // FOND
 
-let bg;
+let backgroundImage;
 
-let angle = 0;
 
-let isInLoop = false;
+// FONT
+
+let font;
 
 /* full screening will change the size of the canvas */
 function windowResized() {
-  gameWidth = windowWidth - 10;
+  gameWidth = windowWidth;
   resizeCanvas(gameWidth, gameHeight);
 
   positionsBoutons();
@@ -106,11 +111,15 @@ function preload() {
   sonPartieGagnee = loadSound('assets/sound/sonPartieGagnee.mp3');
 
   // BACKGROUND
-  bg = loadImage('assets/img/fond.png');
+  backgroundImage = loadImage('assets/img/fond.png');
+
+  // FONT
+
+  font = loadFont('assets/font/Apple II Pro.otf');
 }
 
 function setup() {
-  gameWidth = windowWidth - 10;
+  gameWidth = windowWidth;
   myCanvas = createCanvas(gameWidth, gameHeight);
 
   var ratio = plane.height / plane.width;
@@ -140,7 +149,7 @@ function setup() {
   nbObstacles.size(120,20);
   nbObstacles.hide();
 
-  boutonJouer = createButton("Jouer");
+  boutonJouer = createButton("JOUER");
   boutonJouer.mousePressed(function() {
     jouerMusiqueNiveau();
     gameIsStart = true;
@@ -176,6 +185,9 @@ function setup() {
   musiqueMenu.setVolume(0.10);
   userStartAudio();
   angleMode(DEGREES);
+
+  boutonJouer.style("font-family", 'font');
+  //boutonJouer.style("margin", auto);
 }
 
 function positionsBoutons() {
@@ -188,16 +200,16 @@ function positionsBoutons() {
   boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + heightText - 80);
 
   // Slider choix du nombre d'obstacles
-  nbObstacles.position(gameWidth / 2 + 60, gameHeight / 2 + heightText - 20);
+  nbObstacles.position(gameWidth / 2 + 110, gameHeight / 2 + heightText - 20);
 
   // Repositionnement des différents boutons
-  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + heightText + 70);
-  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + heightText + 70);
-  boutonRecommencer.position(gameWidth / 2 + 70, gameHeight / 2 + heightText + 70);
+  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + heightText + 150);
+  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + heightText + 60);
+  boutonRecommencer.position(gameWidth / 2 + 70, gameHeight / 2 + heightText + 60);
 }
 
 function draw() {
-  background(bg);
+  background(backgroundImage);
   // Animation de fin (looping)
   if(isInLoop) {
     push();
@@ -215,20 +227,24 @@ function draw() {
   }
   // image(planeCrash, planeCrashX, planeCrashY, planeCrashWidth, planeCrashHeight);
   if(!gameIsStart) {
-    stroke(0);
+    noStroke();
     strokeWeight(2);
-    fill(29,184,0);
-    rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
+    fill(0);
+    rect(0, 0, gameWidth, gameHeight);
     fill(255);
-    textSize(32);
-    text("Bienvenue !", gameWidth / 2 - 80,gameHeight / 2 - 60);
+    textSize(50);
+    textFont(font);
+    textAlign(CENTER);
+    text("NOM DU JEU", gameWidth / 2, 200);
     textSize(20);
-    text("Nombres de tuyaux : " + nbObstacles.value(), gameWidth / 2 - 175,gameHeight / 2);
+    text("Nombre de tuyaux : " + nbObstacles.value(), gameWidth / 2 - 80,gameHeight / 2);
     nbObstacles.show();
     textSize(26);
-    text("Cliquez ci-dessous pour jouer :", gameWidth / 2 - 175,gameHeight / 2 + 40);
+    text("Cliquez ci-dessous pour jouer :", gameWidth / 2,gameHeight / 2 + 40);
     boutonJouer.show();
+    cacherBoutonsDirections();
   } else {
+    afficherBoutonsDirections();
     // Animation d'apparition de l'avion au début de la partie
     if(planeX < 0) {
       planeX += 2;
@@ -308,7 +324,10 @@ function draw() {
       rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
       fill(255);
       textSize(32);
-      text("Gagné ! Score final : " + score, gameWidth / 2 - 165,gameHeight / 2 + 8);
+      textAlign(CENTER);
+      text("VICTORY", gameWidth / 2,gameHeight / 2- 25);
+      textSize(22);
+      text("Score : " + score, gameWidth / 2,gameHeight / 2 + 25);
       boutonAccueil.show();
       boutonRecommencer.show();
     }
@@ -346,15 +365,21 @@ function draw() {
       rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
       fill(255);
       textSize(32);
-      text("Perdu ! Score final : " + score, gameWidth / 2 - 150,gameHeight / 2 + 8);
+      textAlign(CENTER);
+      text("GAME OVER", gameWidth / 2,gameHeight / 2 - 25);
+      textSize(22);
+      text("Score : " + score, gameWidth / 2,gameHeight / 2 + 25);
       boutonAccueil.show();
       boutonRecommencer.show();
       jouerSonPartiePerdue();
     }
     countScore();
-    fill(0);
-    textSize(32);
-    text("Score : " + score, windowWidth - 180, 30);
+    fill(0,126);
+    textSize(22);
+    textAlign(LEFT);
+    if(end != true){
+      text("Score : " + score, 0 + 15, 30 + 5);
+    }
   }
   
 }
@@ -523,6 +548,20 @@ function eteindreLesSons() {
   if(sonExplosion.isPlaying) {
     sonExplosion.stop();
   }
+}
+
+function cacherBoutonsDirections() {
+  boutonsEcranTactile[0].hide();
+  boutonsEcranTactile[1].hide();
+  boutonsEcranTactile[2].hide();
+  boutonsEcranTactile[3].hide();
+}
+
+function afficherBoutonsDirections() {
+  boutonsEcranTactile[0].show();
+  boutonsEcranTactile[1].show();
+  boutonsEcranTactile[2].show();
+  boutonsEcranTactile[3].show();
 }
 
 class Tuyau {
