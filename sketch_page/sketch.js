@@ -122,6 +122,9 @@ function setup() {
   gameWidth = windowWidth;
   myCanvas = createCanvas(gameWidth, gameHeight);
 
+  //LINK TO 'sketch-div' DIV
+  myCanvas.parent('sketch-div');
+
   var ratio = plane.height / plane.width;
   planeWidth = 100;
   planeHeight = planeWidth * ratio;
@@ -149,6 +152,9 @@ function setup() {
   nbObstacles.size(120,20);
   nbObstacles.hide();
 
+  //LINK TO 'sketch-div' DIV
+  nbObstacles.parent('sketch-div');
+
   boutonJouer = createButton("JOUER");
   boutonJouer.mousePressed(function() {
     jouerMusiqueNiveau();
@@ -158,6 +164,9 @@ function setup() {
   boutonJouer.size(100,20);
   boutonJouer.hide();
 
+  //LINK TO 'sketch-div' DIV
+  boutonJouer.parent('sketch-div');
+  
   boutonAccueil = createButton("Accueil");
   boutonAccueil.mousePressed(function() { 
     boutonAccueil.hide();
@@ -168,6 +177,9 @@ function setup() {
   boutonAccueil.size(100,20);
   boutonAccueil.hide();
 
+  //LINK TO 'sketch-div' DIV
+  boutonAccueil.parent('sketch-div');
+
   boutonRecommencer = createButton("Recommencer");
   boutonRecommencer.mousePressed(function() {
     boutonAccueil.hide();
@@ -177,6 +189,9 @@ function setup() {
   });
   boutonRecommencer.size(100,20);
   boutonRecommencer.hide();
+
+  //LINK TO 'sketch-div' DIV
+  boutonRecommencer.parent('sketch-div');
 
   positionsBoutons();
 
@@ -194,10 +209,16 @@ function positionsBoutons() {
   let heightText = document.getElementById("game-text").offsetHeight;
 
   // Repositionnement des boutons tactiles
-  boutonsEcranTactile[0].position(gameWidth - 140, gameHeight + heightText - 80);
-  boutonsEcranTactile[1].position(gameWidth - 90, gameHeight + heightText - 130);
-  boutonsEcranTactile[2].position(gameWidth - 40, gameHeight + heightText - 80);
-  boutonsEcranTactile[3].position(gameWidth - 90, gameHeight + heightText - 80);
+  boutonsEcranTactile[0].position(gameWidth - 230, gameHeight + heightText - 80);
+  boutonsEcranTactile[1].position(gameWidth - 180, gameHeight + heightText - 130);
+  boutonsEcranTactile[2].position(gameWidth - 130, gameHeight + heightText - 80);
+  boutonsEcranTactile[3].position(gameWidth - 180, gameHeight + heightText - 80);
+
+  //LINK TO 'sketch-div' DIV
+  boutonsEcranTactile[0].parent('sketch-div');
+  boutonsEcranTactile[1].parent('sketch-div');
+  boutonsEcranTactile[2].parent('sketch-div');
+  boutonsEcranTactile[3].parent('sketch-div');
 
   // Slider choix du nombre d'obstacles
   nbObstacles.position(gameWidth / 2 + 110, gameHeight / 2 + heightText - 20);
@@ -235,7 +256,7 @@ function draw() {
     textSize(50);
     textFont(font);
     textAlign(CENTER);
-    text("NOM DU JEU", gameWidth / 2, 200);
+    text("NOM DU JEU", gameWidth / 2, gameHeight / 4);
     textSize(20);
     text("Nombre de tuyaux : " + nbObstacles.value(), gameWidth / 2 - 80,gameHeight / 2);
     nbObstacles.show();

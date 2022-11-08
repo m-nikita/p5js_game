@@ -1,12 +1,21 @@
 body{
   margin: 0;
   overflow:hidden;
+  height: 100vh;
+  background-color: #000;
+}
+
+.main_container {
+  height: 100%;
 }
 
 .color-text {
   color: #5d8728;
 }
 
-#game-text {
-  padding: 1em;
+#sketch-div {
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
 }
