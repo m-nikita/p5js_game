@@ -71,10 +71,18 @@ let sonPartieGagneeAEteJoue = false;
 
 let backgroundImage;
 
-
 // FONT
 
 let font;
+let font2;
+
+// STYLE
+
+let largeurBoutonJouer = 300;
+let hauteurBoutonJouer = 75;
+
+let largeurBoutonNav = 175;
+let hauteurBoutonNav = 30;
 
 /* full screening will change the size of the canvas */
 function windowResized() {
@@ -116,6 +124,7 @@ function preload() {
   // FONT
 
   font = loadFont('assets/font/Apple II Pro.otf');
+  font2 = loadFont('assets/font/04B_30__.TTF');
 }
 
 function setup() {
@@ -154,6 +163,7 @@ function setup() {
 
   //LINK TO 'sketch-div' DIV
   nbObstacles.parent('sketch-div');
+  nbObstacles.id('sliderTuyaux');
 
   boutonJouer = createButton("JOUER");
   boutonJouer.mousePressed(function() {
@@ -166,6 +176,9 @@ function setup() {
 
   //LINK TO 'sketch-div' DIV
   boutonJouer.parent('sketch-div');
+  boutonJouer.style('width', largeurBoutonJouer);
+  boutonJouer.style('height', hauteurBoutonJouer);
+  boutonJouer.id('boutonJouer');
   
   boutonAccueil = createButton("Accueil");
   boutonAccueil.mousePressed(function() { 
@@ -174,11 +187,12 @@ function setup() {
     jouerMusiqueMenu(); 
     initialisation();
   });
-  boutonAccueil.size(100,20);
+  boutonAccueil.size(largeurBoutonNav,hauteurBoutonNav);
   boutonAccueil.hide();
 
   //LINK TO 'sketch-div' DIV
   boutonAccueil.parent('sketch-div');
+  boutonAccueil.class('boutonNav');
 
   boutonRecommencer = createButton("Recommencer");
   boutonRecommencer.mousePressed(function() {
@@ -187,11 +201,12 @@ function setup() {
     jouerMusiqueNiveau();
     initialisation();
   });
-  boutonRecommencer.size(100,20);
+  boutonRecommencer.size(largeurBoutonNav,hauteurBoutonNav);
   boutonRecommencer.hide();
 
   //LINK TO 'sketch-div' DIV
   boutonRecommencer.parent('sketch-div');
+  boutonRecommencer.class('boutonNav');
 
   positionsBoutons();
 
@@ -201,8 +216,6 @@ function setup() {
   userStartAudio();
   angleMode(DEGREES);
 
-  boutonJouer.style("font-family", 'font');
-  //boutonJouer.style("margin", auto);
 }
 
 function positionsBoutons() {
@@ -221,12 +234,12 @@ function positionsBoutons() {
   boutonsEcranTactile[3].parent('sketch-div');
 
   // Slider choix du nombre d'obstacles
-  nbObstacles.position(gameWidth / 2 + 110, gameHeight / 2 + heightText - 20);
+  nbObstacles.position(gameWidth / 2 + 120, gameHeight / 2 + heightText - 20);
 
   // Repositionnement des différents boutons
-  boutonJouer.position(gameWidth / 2 - 40, gameHeight / 2 + heightText + 150);
-  boutonAccueil.position(gameWidth / 2 - 170, gameHeight / 2 + heightText + 60);
-  boutonRecommencer.position(gameWidth / 2 + 70, gameHeight / 2 + heightText + 60);
+  boutonJouer.position(gameWidth / 2 - (largeurBoutonJouer/2), gameHeight / 2 + heightText + 150);
+  boutonAccueil.position(gameWidth / 2 - (largeurBoutonNav/2) - (largeurBoutonNav/1.75), gameHeight / 2 + heightText + 60);
+  boutonRecommencer.position(gameWidth / 2 - (largeurBoutonNav/2) + (largeurBoutonNav/1.75), gameHeight / 2 + heightText + 60);
 }
 
 function draw() {
@@ -252,11 +265,13 @@ function draw() {
     strokeWeight(2);
     fill(0);
     rect(0, 0, gameWidth, gameHeight);
-    fill(255);
-    textSize(50);
-    textFont(font);
+    fill(195, 224, 115);
+    textSize(70);
+    textFont(font2);
     textAlign(CENTER);
-    text("NOM DU JEU", gameWidth / 2, gameHeight / 4);
+    text("BETWEEN PIPES", gameWidth / 2, gameHeight / 4);
+    fill(255);
+    textFont(font);
     textSize(20);
     text("Nombre de tuyaux : " + nbObstacles.value(), gameWidth / 2 - 80,gameHeight / 2);
     nbObstacles.show();
@@ -342,7 +357,7 @@ function draw() {
         }
       }
       fill(0);
-      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
+      rect(gameWidth / 2 - 210, gameHeight / 2 - 120, 420, 240);
       fill(255);
       textSize(32);
       textAlign(CENTER);
@@ -383,7 +398,7 @@ function draw() {
       end = true;
       
       fill(0);
-      rect(gameWidth / 2 - 200, gameHeight / 2 - 100, 400, 200);
+      rect(gameWidth / 2 - 210, gameHeight / 2 - 120, 420, 240);
       fill(255);
       textSize(32);
       textAlign(CENTER);
