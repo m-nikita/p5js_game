@@ -258,7 +258,7 @@ function positionsBoutons() {
   boutonRecommencer.position(gameWidth / 2 - (largeurBoutonNav/2) + (largeurBoutonNav/1.75), gameHeight / 2 + heightText + 60);
 
   for(let i = 0; i < boutonsSon.length; i++) {
-    boutonsSon[i].position(gameWidth - 60, 10);
+    boutonsSon[i].position(gameWidth - 70, 10);
   }
 }
 
