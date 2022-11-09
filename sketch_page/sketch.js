@@ -582,12 +582,12 @@ function jouerSonExplosion() {
 }
 
 function jouerSonCheckpointPasse() {
-  if(sonActive) {
-    if(sonCheckpointPasseCompteur == score) {
+  if(sonCheckpointPasseCompteur == score) {
+    if(sonActive) {
       sonCheckpointPasse.play();
       sonCheckpointPasse.setVolume(0.15);
-      sonCheckpointPasseCompteur += scoreMultiplicateur; 
     }
+    sonCheckpointPasseCompteur += scoreMultiplicateur; 
   }
 }
 
