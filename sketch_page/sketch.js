@@ -32,6 +32,8 @@ let boutonJouer;
 let boutonRecommencer;
 let boutonAccueil;
 
+let boutonsSon = [];
+
 let gameIsStart = false;
 
 let scoreMultiplicateur = 2;
@@ -66,6 +68,7 @@ let sonPartiePerdue;
 let sonPartiePerdueAEteJoue = false;
 let sonPartieGagnee;
 let sonPartieGagneeAEteJoue = false;
+let sonActive = true;
 
 // FOND
 
@@ -208,14 +211,27 @@ function setup() {
   boutonRecommencer.parent('sketch-div');
   boutonRecommencer.class('boutonNav');
 
-  positionsBoutons();
+  // Buttons to play or stop sound
+  boutonsSon.push(createImg("assets/icon/speaker.png"));
+  boutonsSon.push(createImg("assets/icon/mute.png"));
+  for(let i = 0; i < boutonsSon.length; i++) {
+    //boutonsSon[i].parent('sketch-div');
+    boutonsSon[i].style('width', 50);
+    boutonsSon[i].style('height', 50);
+    boutonsSon[i].mousePressed(function() {
+      sonActive = !sonActive;
+      sonActive ? allumerSonsEmplacement() : eteindreTousLesSons();
+    });
+    i == 0 ? boutonsSon[0].show() : boutonsSon[i].hide();
+  }
 
+  positionsBoutons();
   musiqueMenu.play();
   musiqueMenu.loop();
   musiqueMenu.setVolume(0.10);
   userStartAudio();
-  angleMode(DEGREES);
 
+  angleMode(DEGREES);
 }
 
 function positionsBoutons() {
@@ -240,6 +256,10 @@ function positionsBoutons() {
   boutonJouer.position(gameWidth / 2 - (largeurBoutonJouer/2), gameHeight / 2 + heightText + 150);
   boutonAccueil.position(gameWidth / 2 - (largeurBoutonNav/2) - (largeurBoutonNav/1.75), gameHeight / 2 + heightText + 60);
   boutonRecommencer.position(gameWidth / 2 - (largeurBoutonNav/2) + (largeurBoutonNav/1.75), gameHeight / 2 + heightText + 60);
+
+  for(let i = 0; i < boutonsSon.length; i++) {
+    boutonsSon[i].position(gameWidth - 60, 10);
+  }
 }
 
 function draw() {
@@ -382,7 +402,6 @@ function draw() {
         move(DOWN_ARROW);
       }
     } else {
-
       musiqueNiveau.stop();
       jouerSonExplosion();
       plane = planeHidden;
@@ -417,7 +436,13 @@ function draw() {
       text("Score : " + score, 0 + 15, 30 + 5);
     }
   }
-  
+  if(sonActive) {
+    boutonsSon[0].show();
+    boutonsSon[1].hide();
+  } else {
+    boutonsSon[0].hide();
+    boutonsSon[1].show();
+  }
 }
 
 function detectCollision() {
@@ -448,7 +473,7 @@ function countScore() {
     if (TuyauxBas[i] != undefined && planeX > TuyauxBas[i].getPositionX() + TuyauxBas[i].getLargeurTuyau()) {
       if(!TuyauxBas[i].getEtatTuyau()) {
         jouerSonCheckpointPasse();
-        
+
         //Difficulté croissante
         if(vitesseDeplacementTuyaux < 20) {
           vitesseDeplacementTuyaux += 0.2;
@@ -527,50 +552,62 @@ function initialisation() {
 }
 
 function jouerMusiqueNiveau() {
-  if(musiqueMenu.isPlaying()) {
-    musiqueMenu.stop();
+  if(sonActive) {
+    if(musiqueMenu.isPlaying()) {
+      musiqueMenu.stop();
+    }
+    musiqueNiveau.play();
+    musiqueNiveau.setVolume(0.10);
   }
-  musiqueNiveau.play();
-  musiqueNiveau.setVolume(0.10);
 }
 
 function jouerMusiqueMenu() {
-  if(musiqueNiveau.isPlaying()) {
-    musiqueNiveau.stop();
+  if(sonActive) {
+    if(musiqueNiveau.isPlaying()) {
+      musiqueNiveau.stop();
+    }
+    musiqueMenu.play();
+    musiqueMenu.setVolume(0.10);
   }
-  musiqueMenu.play();
-  musiqueMenu.setVolume(0.10);
 }
 
 function jouerSonExplosion() {
-  if(sonExplosionAEteJoue == false) {
-    sonExplosion.play();
-    sonExplosion.setVolume(0.10);
-    sonExplosionAEteJoue = true; 
+  if(sonActive) {
+    if(sonExplosionAEteJoue == false) {
+      sonExplosion.play();
+      sonExplosion.setVolume(0.10);
+      sonExplosionAEteJoue = true; 
+    }
   }
 }
 
 function jouerSonCheckpointPasse() {
-  if(sonCheckpointPasseCompteur == score) {
-    sonCheckpointPasse.play();
-    sonCheckpointPasse.setVolume(0.15);
-    sonCheckpointPasseCompteur += scoreMultiplicateur; 
+  if(sonActive) {
+    if(sonCheckpointPasseCompteur == score) {
+      sonCheckpointPasse.play();
+      sonCheckpointPasse.setVolume(0.15);
+      sonCheckpointPasseCompteur += scoreMultiplicateur; 
+    }
   }
 }
 
 function jouerSonPartiePerdue() {
-  if(sonPartiePerdueAEteJoue == false) {
-    sonPartiePerdue.play();
-    sonPartiePerdue.setVolume(0.2);
-    sonPartiePerdueAEteJoue = true; 
+  if(sonActive) {
+    if(sonPartiePerdueAEteJoue == false) {
+      sonPartiePerdue.play();
+      sonPartiePerdue.setVolume(0.2);
+      sonPartiePerdueAEteJoue = true; 
+    }
   }
 }
 
 function jouerSonPartieGagnee() {
-  if(sonPartieGagneeAEteJoue == false) {
-    sonPartieGagnee.play();
-    sonPartieGagnee.setVolume(0.05);
-    sonPartieGagneeAEteJoue = true; 
+  if(sonActive) {
+    if(sonPartieGagneeAEteJoue == false) {
+      sonPartieGagnee.play();
+      sonPartieGagnee.setVolume(0.05);
+      sonPartieGagneeAEteJoue = true; 
+    }
   }
 }
 
@@ -586,18 +623,43 @@ function eteindreLesSons() {
   }
 }
 
+function eteindreTousLesSons() {
+  if(musiqueMenu.isPlaying()) {
+    musiqueMenu.stop();
+  }
+  if(musiqueNiveau.isPlaying()) {
+    musiqueNiveau.stop();
+  }
+  if(sonPartieGagnee.isPlaying) {
+    sonPartieGagnee.stop();
+  }
+  if(sonPartiePerdue.isPlaying) {
+    sonPartiePerdue.stop();
+  }
+  if(sonExplosion.isPlaying) {
+    sonExplosion.stop();
+  }
+}
+
+function allumerSonsEmplacement() {
+  // Menu
+  if(document.getElementById("boutonJouer").style.display != "none") {
+    jouerMusiqueMenu();
+  } else {
+    jouerMusiqueNiveau();
+  }
+}
+
 function cacherBoutonsDirections() {
-  boutonsEcranTactile[0].hide();
-  boutonsEcranTactile[1].hide();
-  boutonsEcranTactile[2].hide();
-  boutonsEcranTactile[3].hide();
+  boutonsEcranTactile.forEach(bouton => {
+    bouton.hide();
+  });
 }
 
 function afficherBoutonsDirections() {
-  boutonsEcranTactile[0].show();
-  boutonsEcranTactile[1].show();
-  boutonsEcranTactile[2].show();
-  boutonsEcranTactile[3].show();
+  boutonsEcranTactile.forEach(bouton => {
+    bouton.show();
+  });
 }
 
 class Tuyau {
