@@ -212,8 +212,8 @@ function setup() {
   boutonRecommencer.class('boutonNav');
 
   // Buttons to play or stop sound
-  boutonsSon.push(createImg("assets/icon/speaker.png"));
-  boutonsSon.push(createImg("assets/icon/mute.png"));
+  boutonsSon.push(createImg("assets/icon/icon_sound.svg"));
+  boutonsSon.push(createImg("assets/icon/icon_no_sound.svg"));
   for(let i = 0; i < boutonsSon.length; i++) {
     //boutonsSon[i].parent('sketch-div');
     boutonsSon[i].style('width', 50);
